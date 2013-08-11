@@ -25,6 +25,8 @@ package com.rhz.game;
 
 import org.cocos2dx.lib.Cocos2dxActivity;
 
+import cn.cmgame.billing.api.GameInterface;
+
 import android.os.Bundle;
 
 public class WestMiao extends Cocos2dxActivity{
@@ -32,6 +34,7 @@ public class WestMiao extends Cocos2dxActivity{
 	protected void onCreate(Bundle savedInstanceState){
 		super.onCreate(savedInstanceState);
 	}
+	
 	
     static {
          System.loadLibrary("game");
