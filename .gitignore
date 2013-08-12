@@ -3,3 +3,4 @@ gen/
 obj/
 Debug.win32/
 ipch/
+*sdf
