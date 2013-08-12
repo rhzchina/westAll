@@ -23,6 +23,8 @@ THE SOFTWARE.
  ****************************************************************************/
 package org.cocos2dx.lib;
 
+import com.rhz.game.WestMiao;
+
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -292,12 +294,13 @@ public class Cocos2dxGLSurfaceView extends GLSurfaceView {
 	public boolean onKeyDown(final int pKeyCode, final KeyEvent pKeyEvent) {
 		switch (pKeyCode) {
 			case KeyEvent.KEYCODE_BACK:
-				new AlertDialog.Builder(getContext()).setMessage("确定要退出游戏吗？").setPositiveButton("确定", new android.content.DialogInterface.OnClickListener(){
-					@Override
-					public void onClick(DialogInterface arg0, int arg1) {
-						android.os.Process.killProcess(android.os.Process.myPid());
-					}
-				}).setNegativeButton("取消", null).show();
+//				new AlertDialog.Builder(getContext()).setMessage("确定要退出游戏吗？").setPositiveButton("确定", new android.content.DialogInterface.OnClickListener(){
+//					@Override
+//					public void onClick(DialogInterface arg0, int arg1) {
+//						android.os.Process.killProcess(android.os.Process.myPid());
+//					}
+//				}).setNegativeButton("取消", null).show();
+				WestMiao.exitGame();
 				return true;
 			case KeyEvent.KEYCODE_MENU:
 				this.queueEvent(new Runnable() {

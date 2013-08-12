@@ -1,8 +1,98 @@
-#include "ShopItem.h"#include "GameData.h"#include "tool.h"ShopItem::ShopItem(int x,int y,const char* name,int v,int type, int id){	layer = CCLayer::create();	SETANCHPOS(layer,x,y,0,0);	CCSprite* bg = CCSprite::createWithSpriteFrameName("item_bg.png");	SETANCHPOS(bg,0,0,0,0);	layer->addChild(bg);	layer->setContentSize(bg->getContentSize());	CCSprite* item = CCSprite::create(name);	//SETANCHPOS(item,x + bg->getContentSize().width / 2,0,0.5,0);	SETANCHPOS(item,bg->getContentSize().width / 2 ,bg->getContentSize().height / 2,0.5,0);	layer->addChild(item);	value = v;	this->type = type;	this->id = id;	if(type == 0 ){
+#include "ShopItem.h"
+#include "GameData.h"
+#include "tool.h"
+
+ShopItem::ShopItem(int x,int y,const char* name,int v,int type, int id)
+{
+	layer = CCLayer::create();
+	SETANCHPOS(layer,x,y,0,0);
+
+	CCSprite* bg = CCSprite::createWithSpriteFrameName("item_bg.png");
+	SETANCHPOS(bg,0,0,0,0);
+	layer->addChild(bg);
+
+	layer->setContentSize(bg->getContentSize());
+
+	CCSprite* item = CCSprite::create(name);
+	//SETANCHPOS(item,x + bg->getContentSize().width / 2,0,0.5,0);
+	SETANCHPOS(item,bg->getContentSize().width / 2 ,bg->getContentSize().height / 2,0.5,0);
+	layer->addChild(item);
+
+	value = v;
+	this->type = type;
+	this->id = id;
+
+	if(type == 0 ){
 		CCLog("weapon id is %d", id);
-		char* nameStr[] = {"æœ¨æ£","é“æ£","é“œæ£", "æ°´æ™¶æ£", "æœˆç‰™æ–", "ä¹é½¿è€™", "é‡‘ç®æ£’"};
+		char* nameStr[] = {"Ä¾¹÷","Ìú¹÷","Í­¹÷", "Ë®¾§¹÷", "ÔÂÑÀÕÈ", "¾Å³İ°Ò", "½ğ¹¿°ô"};
 		CCLabelTTF* weaponName = CCLabelTTF::create(conv(nameStr[id]),"Aria",24);
 		SETANCHPOS(weaponName, bg->getContentSize().width / 2, 80, 0.5, 0.5);
 		weaponName->setColor(ccc3(255,170,34));
 		layer->addChild(weaponName);
-	}	int state = -1;   //æœªè´­ä¹° çš„çŠ¶æ€	vector<int> temp =  GameData::getState(type);	if(temp.at(0) == id){		state = 0;  //æ­£åœ¨ä½¿ç”¨	}else{		for(int i = 1;i < temp.size();i++){			if(temp.at(i) == id){				state = 1;  //å·²è´­ä¹°				break;			}		}	}	if (state == -1){ //æ­¤ç‰©å“è¿˜æœªè´­ä¹°		char str[20];		sprintf(str,"%d",v);		CCLabelAtlas* valueText = CCLabelAtlas::create(str,"num/num_yellow.png",28,40,'0');		SETANCHPOS(valueText,bg->getContentSize().width / 2,20,0.5,0);		layer->addChild(valueText);	}else{  //æ­¤ç‰©å“å·²è´­ä¹°		char* str = conv("å·²è´­ä¹°");		ccColor3B color = ccc3(255,0,0);		if(state == 0){ // ç‰©å“æ­£åœ¨ä½¿ç”¨			CCSprite* use = CCSprite::createWithSpriteFrameName("use.png");			SETANCHPOS(use,bg->getContentSize().width / 2, bg->getContentSize().height / 2,0.5,0);			layer->addChild(use);			str = conv("å·²ä½¿ç”¨");			color = ccc3(102, 17, 17);		}		CCLabelTTF* text = CCLabelTTF::create(str,"Arial",30);		text->setColor(color);		SETANCHPOS(text,bg->getContentSize().width / 2 ,25,0.5,0);		layer->addChild(text);	}	sFlag = CCSprite::create("select.png");	SETANCHPOS(sFlag,20,80,0,0);	layer->addChild(sFlag);	sFlag->setVisible(false);}ShopItem::~ShopItem(void){}bool ShopItem::isTouch(float x, float y){	if(CCRectMake(layer->getPositionX(),layer->getPositionY(),		layer->getContentSize().width,layer->getContentSize().height).containsPoint(ccp(x,y))){			return true;	}	return false;}int ShopItem::touchAction(){	if(!GameData::bought(type,id)){		return -1;  //ä¸å¯æ“ä½œ		CCLog("this equip has not bought");	}else{		CCLog("this equip can be use");		GameData::replaceSate(type,id); //ç‚¹å‡»åˆ™æ›´æ–°ä¸ºå½“å‰è£…å¤‡		return 0;  //å¯ä»¥è£…å¤‡	}}
+	}
+
+	int state = -1;   //Î´¹ºÂò µÄ×´Ì¬
+	vector<int> temp =  GameData::getState(type);
+	if(temp.at(0) == id){
+		state = 0;  //ÕıÔÚÊ¹ÓÃ
+	}else{
+		for(int i = 1;i < temp.size();i++){
+			if(temp.at(i) == id){
+				state = 1;  //ÒÑ¹ºÂò
+				break;
+			}
+		}
+	}
+	if (state == -1){ //´ËÎïÆ·»¹Î´¹ºÂò 
+		char str[20];
+		sprintf(str,"%d",v);
+		CCLabelAtlas* valueText = CCLabelAtlas::create(str,"num/num_yellow.png",28,40,'0');
+
+		SETANCHPOS(valueText,bg->getContentSize().width / 2,20,0.5,0);
+		layer->addChild(valueText);
+	}else{  //´ËÎïÆ·ÒÑ¹ºÂò
+		char* str = conv("ÒÑ¹ºÂò");
+		ccColor3B color = ccc3(255,0,0);
+		if(state == 0){ // ÎïÆ·ÕıÔÚÊ¹ÓÃ
+			CCSprite* use = CCSprite::createWithSpriteFrameName("use.png");
+			SETANCHPOS(use,bg->getContentSize().width / 2, bg->getContentSize().height / 2,0.5,0);
+			layer->addChild(use);
+			str = conv("ÒÑÊ¹ÓÃ");
+			color = ccc3(102, 17, 17);
+		}
+		CCLabelTTF* text = CCLabelTTF::create(str,"Arial",30);
+		text->setColor(color);
+		SETANCHPOS(text,bg->getContentSize().width / 2 ,25,0.5,0);
+		layer->addChild(text);
+	}
+
+	sFlag = CCSprite::create("select.png");
+	SETANCHPOS(sFlag,20,80,0,0);
+	layer->addChild(sFlag);
+	sFlag->setVisible(false);
+
+}
+
+
+ShopItem::~ShopItem(void)
+{
+}
+
+bool ShopItem::isTouch(float x, float y){
+	if(CCRectMake(layer->getPositionX(),layer->getPositionY(),
+		layer->getContentSize().width,layer->getContentSize().height).containsPoint(ccp(x,y))){
+			return true;
+	}
+	return false;
+}
+
+int ShopItem::touchAction(){
+	if(!GameData::bought(type,id)){
+		return -1;  //²»¿É²Ù×÷
+		CCLog("this equip has not bought");
+	}else{
+		CCLog("this equip can be use");
+		GameData::replaceSate(type,id); //µã»÷Ôò¸üĞÂÎªµ±Ç°×°±¸
+		return 0;  //¿ÉÒÔ×°±¸
+	}
+}

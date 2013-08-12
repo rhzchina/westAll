@@ -30,13 +30,29 @@ import cn.cmgame.billing.api.GameInterface;
 import android.os.Bundle;
 
 public class WestMiao extends Cocos2dxActivity{
+	private static WestMiao instance;
 
 	protected void onCreate(Bundle savedInstanceState){
 		super.onCreate(savedInstanceState);
+		instance = this;
+		GameInterface.initializeApp(this);
 	}
 	
 	
+	public static void exitGame() {
+		GameInterface.exit(instance, new GameInterface.GameExitCallback() {
+			@Override
+			public void onConfirmExit() {
+			}
+	
+			@Override
+			public void onCancelExit() {
+			}
+		});
+	}
     static {
          System.loadLibrary("game");
     }
+    
+    
 }
