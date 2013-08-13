@@ -1,5 +1,7 @@
 #include "com_rhz_game_JniCall.h"
 #include "WelcomeScene.h"
+#include "GameScene.h"
+#include "StartScene.h"
 #include "tool.h"
 
 JNIEXPORT void JNICALL Java_com_rhz_game_JniCall_callCMethod
@@ -20,8 +22,9 @@ JNIEXPORT void JNICALL Java_com_rhz_game_JniCall_callCMethod
 	case 3:
 	case 4:
 	case 5:
-		CCLog("++++++++++++++++++++%d%d",tab,type);
-		WelcomeScene::instance->createItems(tab,0);
+		//CCLog("++++++++++++++++++++%d%d",tab,type);
+		//WelcomeScene::instance->createItems(tab,0);
+		//CCDirector::sharedDirector()->replaceScene(StartScene::scene());
 		break;
 	}
 	CCLog("@@@@@@@@@@@@@@@@@@@@@@@@@@@here%d",result);
