@@ -76,6 +76,9 @@
     <ClInclude Include="..\Classes\WelcomeScene.h">
       <Filter>source</Filter>
     </ClInclude>
+    <ClInclude Include="..\Classes\com_rhz_game_JniCall.h">
+      <Filter>include</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Classes\Role.cpp">
@@ -115,6 +118,9 @@
       <Filter>source</Filter>
     </ClCompile>
     <ClCompile Include="..\Classes\Prop.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\com_rhz_game_JniCall.cpp">
       <Filter>source</Filter>
     </ClCompile>
   </ItemGroup>

@@ -26,8 +26,10 @@ package com.rhz.game;
 import org.cocos2dx.lib.Cocos2dxActivity;
 
 import cn.cmgame.billing.api.GameInterface;
+import cn.cmgame.billing.api.GameInterface.BillingCallback;
 
 import android.os.Bundle;
+import android.widget.Toast;
 
 public class WestMiao extends Cocos2dxActivity{
 	private static WestMiao instance;
@@ -50,6 +52,30 @@ public class WestMiao extends Cocos2dxActivity{
 			}
 		});
 	}
+	
+	public static void doCharge(final int chargeNum){
+		GameInterface.doBilling(instance, true, false, "00" + chargeNum, new BillingCallback() {
+			
+			@Override
+			public void onUserOperCancel(String arg0) {
+				Toast.makeText(instance, arg0, Toast.LENGTH_LONG).show();
+				JniCall.callCMethod(chargeNum);
+				
+			}
+			
+			@Override
+			public void onBillingSuccess(String arg0) {
+				Toast.makeText(instance, arg0, Toast.LENGTH_LONG).show();
+			}
+			
+			@Override
+			public void onBillingFail(String arg0) {
+				Toast.makeText(instance, arg0, Toast.LENGTH_LONG).show();
+				
+			}
+		});
+	}
+	
     static {
          System.loadLibrary("game");
     }

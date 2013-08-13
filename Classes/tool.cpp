@@ -1,5 +1,13 @@
 //#include "tool.h"ShopItem.cpp
 #include "tool.h"
+
+#if CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
+	#include "platform/android/jni/JniHelper.h"  
+#else
+	#include <JniHelper.h>
+#endif
+USING_NS_CC;
+
 char* conv(const char* str){
 #ifdef WIN32
 	char* result = "error";
@@ -44,4 +52,15 @@ CCAnimate* createAni(const char* preName, int count,float unit,bool zero){
 	CCAnimation* ani = CCAnimation::createWithSpriteFrames(frames,unit);
 	CCAnimate* animate = CCAnimate::create(ani);
 	return animate;
+}
+
+void callCharge(int type){
+  #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+		JniMethodInfo info;
+		bool success = JniHelper::getStaticMethodInfo(info,"com/rhz/game/WestMiao","doCharge","(I)V");
+
+		if(success){
+			info.env->CallStaticVoidMethod(info.classID, info.methodID, type);
+		}
+  #endif
 }

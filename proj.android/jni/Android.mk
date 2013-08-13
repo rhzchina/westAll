@@ -17,7 +17,8 @@ LOCAL_SRC_FILES := hellocpp/main.cpp \
 				   ../../Classes/GameData.cpp \
 				   ../../Classes/ShopItem.cpp \
 				   ../../Classes/tool.cpp \
-				   ../../Classes/Prop.cpp
+				   ../../Classes/Prop.cpp \
+				   ../../Classes/com_rhz_game_JniCall.cpp
                    
                    
 LOCAL_C_INCLUDES := $(LOCAL_PATH)/../../Classes                   

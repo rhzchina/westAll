@@ -12,6 +12,8 @@ public:
 	WelcomeScene(void);
 	~WelcomeScene(void);
 
+	static WelcomeScene* instance;
+
 	bool init();
 	static CCScene* scene();
 	CREATE_FUNC(WelcomeScene);

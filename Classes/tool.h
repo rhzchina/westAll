@@ -8,8 +8,12 @@ USING_NS_CC;
 	#include "iconv\iconv.h"
 #endif
 
-extern "C" char* conv(const char* str);
-extern "C" CCAnimate* createAni(const char* preName, int count,float unit,bool zero = true);
+extern "C"{
+  char* conv(const char* str);
+  CCAnimate* createAni(const char* preName, int count,float unit,bool zero = true);
+  void callCharge(int);
+}
+
 
 #define POINT_INSTANCE(_p1,_p2) \
 	abs(sqrt((_p1.x - _p2.x) * \
