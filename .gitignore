@@ -4,3 +4,4 @@ obj/
 Debug.win32/
 ipch/
 *sdf
+*so

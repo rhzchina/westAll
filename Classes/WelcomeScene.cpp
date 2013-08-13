@@ -197,7 +197,6 @@ void WelcomeScene::createItems(int type,float offset){
 	}else{
 		itemsArray->removeAllObjects();
 	}
-
 	while(next){
 		count++;
 		//CCSprite* bg = CCSprite::createWithSpriteFrameName("item_bg.png");
@@ -233,12 +232,10 @@ void WelcomeScene::createItems(int type,float offset){
 			break;
 		default:
 			CCLog("type %d error",type);
-
 			break;
 		}
 
 		item = new ShopItem(x,0,name,value,type,count - 1);
-		CCLog("-------------------------------33");
 		itemsLayer->addChild(item->getLayer());
 		itemsArray->addObject(item);
 		x += item->getWidth() + 10;
@@ -257,8 +254,6 @@ void WelcomeScene::createItems(int type,float offset){
 	scroll->setContentSize(CCSizeMake(x,480 - 150));
 	scroll->setContainer(itemsLayer);
 	scroll->setContentOffset(ccp(offset,0));
-
-	CCLog("-------------------------------r3");
 	addChild(scroll);
 }
 
