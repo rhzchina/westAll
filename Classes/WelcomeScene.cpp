@@ -84,8 +84,8 @@ bool WelcomeScene::init(){
 		addChild(tipText);
 
 		//用户数据信息显示
-		CCSprite* gold = CCSprite::createWithSpriteFrameName("gold.png");
-		SETANCHPOS(gold,322,420,0,0);
+		CCSprite* gold = CCSprite::createWithSpriteFrameName("star.png");
+		SETANCHPOS(gold,322,410,0,0);
 		addChild(gold);
 
 	/*	CCSprite* god = CCSprite::createWithSpriteFrameName("god.png");
@@ -97,12 +97,12 @@ bool WelcomeScene::init(){
 		addChild(star);*/
 		char account[20];
 		sprintf(account,"%d",GameData::getGold());
-		goldNum = CCLabelAtlas::create(account,"num/num_yellow.png",28,40,'0');
+		goldNum = CCLabelAtlas::create(account,"num/num_green.png",28,40,'0');
 		SETANCHPOS(goldNum,410,425,0,0);
 		addChild(goldNum);
 		success = true;
 	}while(0);
-
+	
 	return success;
 }
 
@@ -143,7 +143,7 @@ void WelcomeScene::btnCallback(CCObject* sender){
 					GameData::replaceSate(temp->getType(),temp->getId());
 					createItems(temp->getType(),scroll->getContentOffset().x);
 				}else{
-					tipText->setString(conv( "对不起您的元宝不足，无法够买"));
+					tipText->setString(conv( "对不起您的蟠桃不足，无法够买"));
 				}
 			}else{
 				int chargeNum = 0;
@@ -308,7 +308,7 @@ void WelcomeScene::ccTouchesEnded(CCSet* touches,CCEvent* event){
 						if(item->getValue() < 10){
 							sprintf(t,"购买物品需要%d元人民币，点击右侧的买入按钮即可购买",item->getValue());
 						}else{
-							sprintf(t,"购买物品需要%d元宝，点击右侧的买入按钮即可购买",item->getValue());
+							sprintf(t,"购买物品需要%d蟠桃，点击右侧的买入按钮即可购买",item->getValue());
 						}
 						tipText->setString(conv(t));
 						temp->setSelected(true);

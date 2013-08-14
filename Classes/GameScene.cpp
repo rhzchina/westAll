@@ -165,7 +165,7 @@ void GameScene::bgMove(float dt){
 	GameData::addLoop();
 	if(GameData::getLoop() % 5 == 0){
 		GameData::addDistance(getSpeed() * 2);
-		GameData::addScore(getSpeed() * 5);
+		//GameData::addScore(1);
 	}
 	char v[20];
 	sprintf(v,"%d",GameData::getDistance());

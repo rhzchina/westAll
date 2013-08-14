@@ -130,7 +130,7 @@ void StartScene::btnCallback(CCObject* sender){
 		CCSpriteFrameCache::sharedSpriteFrameCache()->removeSpriteFrames();
 		break;
 	case 3:
-		CCDirector::sharedDirector()->end();
+		callCharge(-1);
 		break;
 	case 4:
 		if(((CCMenuItemToggle*)sender)->selectedItem() == soundOn){

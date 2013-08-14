@@ -16,8 +16,12 @@ public:
 	static int getMaxLevel(){return instance->max;}
 
 	static void setGold(int g){instance->gold = g;}
-	static int getGold(){return instance->gold;}
+	//static int getGold(){return instance->gold;}
 	static void addGold(int change){instance->gold += change;}
+
+	//static void setGold(int g){instance->gold = g;}
+	static int getGold(){return instance->score;}
+	//static void addGold(int change){instance->gold += change;}
 
 	static void addSate(int type,int state,int v){instance->data[type].push_back(v);}
 	static void replaceSate(int type,int v){instance->data[type][0] = v;}

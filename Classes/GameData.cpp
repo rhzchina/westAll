@@ -6,7 +6,7 @@ GameData::GameData(void)
 {
 	level = 1;
 	max = 1;
-	gold = 99999999;
+	gold = 0;
 	score = 0;
 	distance = 0;
 	best = 0;
@@ -49,11 +49,12 @@ int GameData::getLevel(){
 void GameData::reset(bool all){
 	if(all){
 		instance->best = 0;
+		instance->score = 0;
 	}else{
 		instance->best = instance->best > instance->distance ? instance->best : instance->distance;		
 	}
 	instance->loopCount = 0;
-	instance->score = 0;
+
 	instance->distance = 0;
 	
 }

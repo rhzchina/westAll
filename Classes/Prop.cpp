@@ -12,19 +12,19 @@ Prop::Prop(int type, CCLayer* parent, float x, float y)
 		switch(rand() % 4){
 		case 0:
 			sprintf(name,"peach.png");
-			score = 10;
+			score = 20;
 			break;
 		case 1:
 			sprintf(name,"dragon_scale.png");
-			score = 15;
+			score = 5;
 			break;
 		case 2:
 			sprintf(name,"fire.png");
-			score = 20;
+			score = 5;
 			break;	
 		case 3:
 			sprintf(name,"bamboo.png");
-			score = 30;
+			score = 5;
 			break;
 		}
 		prop = CCSprite::createWithSpriteFrameName(name);
