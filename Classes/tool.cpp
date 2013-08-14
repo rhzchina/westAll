@@ -1,28 +1,25 @@
 //#include "tool.h"ShopItem.cpp
 #include "tool.h"
-
-#if CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
-	#include "platform/android/jni/JniHelper.h"  
-#else
-	#include <JniHelper.h>
-#endif
-USING_NS_CC;
-
 char* conv(const char* str){
-#ifdef WIN32
+//#ifdef WIN32
 	char* result = "error";
 	iconv_t iconvH;
 	iconvH = iconv_open("utf-8","gbk");
 	if(iconvH != 0){
-		const char* strChar = str;
-		const char** pin = &strChar;
+#ifdef WIN32
+		const char* pin = str;
+		//const char** pin = &strChar;
+#else
+		char* pin = (char*)malloc(strlen(str));
+		strcpy(pin, str);
+#endif
 
 		size_t strLength = strlen(str);
 		char* outbuf = (char*)malloc(strLength * 4);
 		char* pBuff = outbuf;
 		memset(outbuf,0,strLength * 4);
 		size_t outLength = strLength * 4;
-		if(iconv(iconvH,pin,&strLength,&outbuf,&outLength) == -1){
+		if(iconv(iconvH,&pin,&strLength,&outbuf,&outLength) == -1){
 			iconv_close(iconvH);
 		}else{
 			result = pBuff;
@@ -30,13 +27,13 @@ char* conv(const char* str){
 		}
 	}
 	return result;
-#else
-	char* r = (char*)malloc(strlen(str) + 1);
-	memcpy(r,str,strlen(str));
-	r[strlen(str)] = '\0';
-	return r;
-
-#endif
+//#else
+//	char* r = (char*)malloc(strlen(str) + 1);
+//	memcpy(r,str,strlen(str));
+//	r[strlen(str)] = '\0';
+//	return r;
+//
+//#endif
 }
 
 CCAnimate* createAni(const char* preName, int count,float unit,bool zero){

@@ -23,6 +23,7 @@ public:
 	void ccTouchesEnded(CCSet*,CCEvent*);
 
 	void btnCallback(CCObject*);
+	void refresh(float dt);
 	void createItems(int type,float off = 0);
 private:
 	CCScrollView* scroll;

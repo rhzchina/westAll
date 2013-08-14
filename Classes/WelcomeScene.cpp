@@ -157,7 +157,7 @@ void WelcomeScene::btnCallback(CCObject* sender){
 				callCharge(chargeNum);
 			}
 		}
-		break;
+		return;
 	case WEAPON:
 		createItems(WEAPON);
 		tipText->setString(" ");
@@ -179,6 +179,7 @@ void WelcomeScene::btnCallback(CCObject* sender){
 }
 
 void WelcomeScene::createItems(int type,float offset){
+	temp = NULL;
 	CCSpriteFrameCache::sharedSpriteFrameCache()->addSpriteFramesWithFile("shop.plist","shop.png");
 
 	if(scroll){
@@ -318,4 +319,10 @@ void WelcomeScene::ccTouchesEnded(CCSet* touches,CCEvent* event){
 	}
 	}
 	touchId = -1;
+}
+
+void WelcomeScene::refresh(float dt){
+	GameData::addSate(temp->getType(),0,temp->getId());
+	GameData::replaceSate(temp->getType(),temp->getId());
+	createItems(temp->getType(),scroll->getContentOffset().x);
 }

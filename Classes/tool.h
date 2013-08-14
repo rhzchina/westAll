@@ -4,7 +4,11 @@
 #include <string>
 #include "cocos2d.h"
 USING_NS_CC;
-#ifdef WIN32
+#if CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
+	#include "platform/android/jni/JniHelper.h"  
+#include "libiconv/include/iconv.h"
+#else
+	#include <JniHelper.h>
 	#include "iconv\iconv.h"
 #endif
 
