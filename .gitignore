@@ -5,3 +5,7 @@ Debug.win32/
 ipch/
 *sdf
 *so
+*sh
+*vcxproj
+*assets/
+*properties
