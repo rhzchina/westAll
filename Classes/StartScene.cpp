@@ -92,7 +92,11 @@ bool StartScene::init(){
 		sound->addChild(toggle);
 
 		//SimpleAudioEngine::sharedEngine()->preloadBackgroundMusic(CCFileUtils::sharedFileUtils()->fullPathFromRelativePath("game.ogg"));
-		CocosDenshion::SimpleAudioEngine::sharedEngine()->playBackgroundMusic("game.ogg",true);
+		if(checkPay(-1)){  //¿ªÆôÒôÀÖ
+			CocosDenshion::SimpleAudioEngine::sharedEngine()->playBackgroundMusic("game.ogg",true);
+		}else{
+			toggle->setSelectedIndex(1);
+		}
 
 		success = true;
 	}while(false);
@@ -130,15 +134,17 @@ void StartScene::btnCallback(CCObject* sender){
 		CCSpriteFrameCache::sharedSpriteFrameCache()->removeSpriteFrames();
 		break;
 	case 3:
-		CCDirector::sharedDirector()->end();
+		callCharge(-1);
 		break;
 	case 4:
 		if(((CCMenuItemToggle*)sender)->selectedItem() == soundOn){
-			CCLOG("close sound");
 			CocosDenshion::SimpleAudioEngine::sharedEngine()->pauseBackgroundMusic();
 		}else{
-			CCLOG("open sound");
-			CocosDenshion::SimpleAudioEngine::sharedEngine()->resumeBackgroundMusic();
+			if(CocosDenshion::SimpleAudioEngine::sharedEngine()->isBackgroundMusicPlaying()){
+				CocosDenshion::SimpleAudioEngine::sharedEngine()->resumeBackgroundMusic();
+			}else{
+				CocosDenshion::SimpleAudioEngine::sharedEngine()->playBackgroundMusic("game.ogg",true);
+			}
 		}
 		break;
 	}

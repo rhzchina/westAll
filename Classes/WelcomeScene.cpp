@@ -2,6 +2,7 @@
 #include "tool.h"
 #include "StartScene.h"
 
+WelcomeScene* WelcomeScene::instance = NULL;
 
 WelcomeScene::WelcomeScene(void)
 {
@@ -75,16 +76,16 @@ bool WelcomeScene::init(){
 		SETANCHPOS(dlg,0,0,0,0);
 		addChild(dlg);
 
-		tipText = CCLabelTTF::create(conv("欢迎使用商城功能，点击类型按钮切换标签"),"arial",40);
-		tipText->setDimensions(CCSizeMake(500,100));
+		tipText = CCLabelTTF::create(conv("欢迎使用商城功能，点击类型按钮切换标签"),"arial",30);
+		tipText->setDimensions(CCSizeMake(500,120));
 		tipText->setColor(ccc3(102, 17, 17));
 		tipText->setHorizontalAlignment(kCCTextAlignmentLeft);
-		SETANCHPOS(tipText,200,20,0,0);
+		SETANCHPOS(tipText,200,0,0,0);
 		addChild(tipText);
 
 		//用户数据信息显示
-		CCSprite* gold = CCSprite::createWithSpriteFrameName("gold.png");
-		SETANCHPOS(gold,322,420,0,0);
+		CCSprite* gold = CCSprite::createWithSpriteFrameName("star.png");
+		SETANCHPOS(gold,322,410,0,0);
 		addChild(gold);
 
 	/*	CCSprite* god = CCSprite::createWithSpriteFrameName("god.png");
@@ -96,12 +97,12 @@ bool WelcomeScene::init(){
 		addChild(star);*/
 		char account[20];
 		sprintf(account,"%d",GameData::getGold());
-		goldNum = CCLabelAtlas::create(account,"num/num_yellow.png",28,40,'0');
+		goldNum = CCLabelAtlas::create(account,"num/num_green.png",28,40,'0');
 		SETANCHPOS(goldNum,410,425,0,0);
 		addChild(goldNum);
 		success = true;
 	}while(0);
-
+	
 	return success;
 }
 
@@ -112,10 +113,10 @@ CCScene* WelcomeScene::scene(){
 		scene = CCScene::create();
 		CC_BREAK_IF(!scene);
 
-		WelcomeScene* layer = WelcomeScene::create();
-		CC_BREAK_IF(!layer);
+		instance = WelcomeScene::create();
+		CC_BREAK_IF(!instance);
 
-		scene->addChild(layer);
+		scene->addChild(instance);
 
 	}while(0);
 
@@ -132,19 +133,31 @@ void WelcomeScene::btnCallback(CCObject* sender){
 		break;
 	case -1:
 		if(temp){
-			if(GameData::getGold() >= temp->getValue()){
-				GameData::addGold(-temp->getValue());
-				sprintf(str,"%d",GameData::getGold());
-				goldNum->setString(str);
-				tipText->setString(conv("购买成功，已使用，谢谢"));
-				GameData::addSate(temp->getType(),0,temp->getId());
-				GameData::replaceSate(temp->getType(),temp->getId());
-				createItems(temp->getType(),scroll->getContentOffset().x);
+			if (temp->getValue() > 10){
+				if(GameData::getGold() >= temp->getValue()){
+					GameData::addGold(-temp->getValue());
+					sprintf(str,"%d",GameData::getGold());
+					goldNum->setString(str);
+					tipText->setString(conv("购买成功，已使用，谢谢"));
+					GameData::addSate(temp->getType(),0,temp->getId());
+					GameData::replaceSate(temp->getType(),temp->getId());
+					createItems(temp->getType(),scroll->getContentOffset().x);
+				}else{
+					tipText->setString(conv( "对不起您的仙桃不足，无法够买"));
+				}
 			}else{
-				tipText->setString(conv( "对不起您的元宝不足，无法够买"));
+				int chargeNum = 0;
+				if(temp->getType() == CLOTHES){
+					chargeNum = 5;
+				}else if(temp->getType() == WEAPON){
+					if(temp->getId() > 3){
+						chargeNum = temp->getId() - 2;
+					}
+				}
+				callCharge(chargeNum);
 			}
 		}
-		break;
+		return;
 	case WEAPON:
 		createItems(WEAPON);
 		tipText->setString(" ");
@@ -166,6 +179,7 @@ void WelcomeScene::btnCallback(CCObject* sender){
 }
 
 void WelcomeScene::createItems(int type,float offset){
+	temp = NULL;
 	CCSpriteFrameCache::sharedSpriteFrameCache()->addSpriteFramesWithFile("shop.plist","shop.png");
 
 	if(scroll){
@@ -184,7 +198,6 @@ void WelcomeScene::createItems(int type,float offset){
 	}else{
 		itemsArray->removeAllObjects();
 	}
-
 	while(next){
 		count++;
 		//CCSprite* bg = CCSprite::createWithSpriteFrameName("item_bg.png");
@@ -194,7 +207,11 @@ void WelcomeScene::createItems(int type,float offset){
 		case WEAPON:
 			max = 7;
 			sprintf(name,"weapon/weapon%d.png",count - 1);
-			value = 1000 * count;
+			if(count < 5){
+				value = 1000 * count;
+			}else{
+				value = 2;
+			}
 			break;
 		case TREASURE:
 			max = 1;
@@ -208,12 +225,17 @@ void WelcomeScene::createItems(int type,float offset){
 		case CLOTHES:
 			max = 4;
 			sprintf(name,"hero_%d.png",(count - 1));
-			value = 800 * count;
+			if(count == 4){
+				value = 2;
+			}else{
+				value = 800 * count;
+			}
 			break;
 		default:
 			CCLog("type %d error",type);
 			break;
 		}
+
 		item = new ShopItem(x,0,name,value,type,count - 1);
 		itemsLayer->addChild(item->getLayer());
 		itemsArray->addObject(item);
@@ -222,6 +244,7 @@ void WelcomeScene::createItems(int type,float offset){
 			next = false;
 		}
 	}
+
 	itemsLayer->setContentSize(CCSizeMake(x,480 - 150));
 	SETANCHPOS(itemsLayer,0,0,0,0);
 
@@ -232,7 +255,6 @@ void WelcomeScene::createItems(int type,float offset){
 	scroll->setContentSize(CCSizeMake(x,480 - 150));
 	scroll->setContainer(itemsLayer);
 	scroll->setContentOffset(ccp(offset,0));
-
 	addChild(scroll);
 }
 
@@ -283,7 +305,11 @@ void WelcomeScene::ccTouchesEnded(CCSet* touches,CCEvent* event){
 					}else{
 						temp = item;
 						char t[100];
-						sprintf(t,"购买物品需要%d元宝，点击右侧的买入按钮即可购买",item->getValue());
+						if(item->getValue() < 10){
+							sprintf(t,"购买物品需要%d元人民币，点击右侧的买入按钮即可购买",item->getValue());
+						}else{
+							sprintf(t,"购买物品需要%d仙桃，点击右侧的买入按钮即可购买",item->getValue());
+						}
 						tipText->setString(conv(t));
 						temp->setSelected(true);
 					}
@@ -293,4 +319,10 @@ void WelcomeScene::ccTouchesEnded(CCSet* touches,CCEvent* event){
 	}
 	}
 	touchId = -1;
+}
+
+void WelcomeScene::refresh(float dt){
+	GameData::addSate(temp->getType(),0,temp->getId());
+	GameData::replaceSate(temp->getType(),temp->getId());
+	createItems(temp->getType(),scroll->getContentOffset().x);
 }

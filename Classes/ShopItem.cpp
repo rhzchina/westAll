@@ -43,7 +43,7 @@ ShopItem::ShopItem(int x,int y,const char* name,int v,int type, int id)
 			}
 		}
 	}
-	if (state == -1){ //此物品还未购买 
+	if (state == -1){ //此物品还未购买
 		char str[20];
 		sprintf(str,"%d",v);
 		CCLabelAtlas* valueText = CCLabelAtlas::create(str,"num/num_yellow.png",28,40,'0');
