@@ -161,14 +161,12 @@ void WelcomeScene::btnCallback(CCObject* sender){
 	case WEAPON:
 		createItems(WEAPON);
 		tipText->setString(" ");
-		checkPay(2);
 		break;
 	case TREASURE:
 		createItems(TREASURE);
 		tipText->setString(" ");
 		break;
 	case TIP:
-		checkPay(3);
 		createItems(TIP);
 		tipText->setString(" ");
 		break;
