@@ -24,11 +24,14 @@ THE SOFTWARE.
 package com.rhz.game;
 
 import org.cocos2dx.lib.Cocos2dxActivity;
+import org.cocos2dx.lib.Cocos2dxHelper;
 
 import cn.cmgame.billing.api.GameInterface;
 import cn.cmgame.billing.api.GameInterface.BillingCallback;
 
 import android.os.Bundle;
+import android.os.Process;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 public class WestMiao extends Cocos2dxActivity{
@@ -45,6 +48,8 @@ public class WestMiao extends Cocos2dxActivity{
 		GameInterface.exit(instance, new GameInterface.GameExitCallback() {
 			@Override
 			public void onConfirmExit() {
+				Cocos2dxHelper.end();
+				Process.killProcess(android.os.Process.myPid());
 			}
 	
 			@Override
@@ -54,6 +59,7 @@ public class WestMiao extends Cocos2dxActivity{
 	}
 	
 	public static void doCharge(final int chargeNum){
+		System.out.println("the charge point is 00" + chargeNum);
 		if(chargeNum == -1){
 			exitGame();
 		}else{
@@ -75,6 +81,14 @@ public class WestMiao extends Cocos2dxActivity{
 					
 				}
 			});
+		}
+	}
+	
+	public static boolean checkPay(int index){
+		if(index == -1){  //用来获取是否开启声音，同用此函数
+			return GameInterface.isMusicEnabled();
+		}else{
+			return GameInterface.getActivateFlag("00" + index);
 		}
 	}
 	

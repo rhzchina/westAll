@@ -160,23 +160,29 @@ void SelectScene::ccTouchesEnded(CCSet* touches,CCEvent* event){
 	CCPoint location = CCDirector::sharedDirector()->convertToGL(touch->getLocationInView());
 	int num = touchedLevel(location);
 	if (num != -1 && num == touched){
-		GameData::setLevel(num);
-		CCSpriteFrameCache::sharedSpriteFrameCache()->removeSpriteFrames();
-		CCDirector::sharedDirector()->replaceScene(GameScene::scene());
+		if(num == 1 || checkPay(1)){
+			GameData::setLevel(num);
+			CCSpriteFrameCache::sharedSpriteFrameCache()->removeSpriteFrames();
+			CCDirector::sharedDirector()->replaceScene(GameScene::scene());
+		}else{
+			callCharge(1);
+		}
 	}else{
 		touched = -1;
-
-	}
-	if(location.x > lastX){
-		if(index > 0){
-			index--;
-		}
-	}else{
-		if(index < 3){
-			index++;
-		}
 	}
 
+	//有30象素的差认为是滑动
+	if(abs(location.x - lastX) > 30){
+		if(location.x > lastX){
+			if(index > 0){
+				index--;
+			}
+		}else{
+			if(index < 3){
+				index++;
+			}
+		}
+	}
 }
 
 int SelectScene::touchedLevel(CCPoint pos){

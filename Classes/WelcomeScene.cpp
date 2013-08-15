@@ -143,15 +143,15 @@ void WelcomeScene::btnCallback(CCObject* sender){
 					GameData::replaceSate(temp->getType(),temp->getId());
 					createItems(temp->getType(),scroll->getContentOffset().x);
 				}else{
-					tipText->setString(conv( "对不起您的蟠桃不足，无法够买"));
+					tipText->setString(conv( "对不起您的仙桃不足，无法够买"));
 				}
 			}else{
 				int chargeNum = 0;
 				if(temp->getType() == CLOTHES){
 					chargeNum = 5;
 				}else if(temp->getType() == WEAPON){
-					if(temp->getId() > 4){
-						chargeNum = temp->getId() - 3;
+					if(temp->getId() > 3){
+						chargeNum = temp->getId() - 2;
 					}
 				}
 				callCharge(chargeNum);
@@ -161,12 +161,14 @@ void WelcomeScene::btnCallback(CCObject* sender){
 	case WEAPON:
 		createItems(WEAPON);
 		tipText->setString(" ");
+		checkPay(2);
 		break;
 	case TREASURE:
 		createItems(TREASURE);
 		tipText->setString(" ");
 		break;
 	case TIP:
+		checkPay(3);
 		createItems(TIP);
 		tipText->setString(" ");
 		break;
@@ -308,7 +310,7 @@ void WelcomeScene::ccTouchesEnded(CCSet* touches,CCEvent* event){
 						if(item->getValue() < 10){
 							sprintf(t,"购买物品需要%d元人民币，点击右侧的买入按钮即可购买",item->getValue());
 						}else{
-							sprintf(t,"购买物品需要%d蟠桃，点击右侧的买入按钮即可购买",item->getValue());
+							sprintf(t,"购买物品需要%d仙桃，点击右侧的买入按钮即可购买",item->getValue());
 						}
 						tipText->setString(conv(t));
 						temp->setSelected(true);

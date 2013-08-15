@@ -16,6 +16,7 @@ extern "C"{
   char* conv(const char* str);
   CCAnimate* createAni(const char* preName, int count,float unit,bool zero = true);
   void callCharge(int);
+  bool checkPay(int);
 }
 
 

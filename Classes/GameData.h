@@ -17,14 +17,34 @@ public:
 
 	static void setGold(int g){instance->gold = g;}
 	//static int getGold(){return instance->gold;}
-	static void addGold(int change){instance->gold += change;}
+	static void addGold(int change){
+		instance->score += change;
+		CCUserDefault::sharedUserDefault()->setIntegerForKey("score", instance->score);
+		CCUserDefault::sharedUserDefault()->flush();	
+	}
 
 	//static void setGold(int g){instance->gold = g;}
 	static int getGold(){return instance->score;}
 	//static void addGold(int change){instance->gold += change;}
 
-	static void addSate(int type,int state,int v){instance->data[type].push_back(v);}
-	static void replaceSate(int type,int v){instance->data[type][0] = v;}
+	//¹ºÂòÊ±´æ´¢Êý¾Ý
+	static void addSate(int type,int state,int v){
+		instance->data[type].push_back(v);
+		char key[50];
+		memset(key,0,50);
+		sprintf(key,"type%d%dbuy",type, v);
+		CCUserDefault::sharedUserDefault()->setBoolForKey(key,true);
+		CCUserDefault::sharedUserDefault()->flush();
+	}
+
+	static void replaceSate(int type,int v){
+		instance->data[type][0] = v;
+		char key[50];
+		sprintf(key,"type%duse",type);
+		CCUserDefault::sharedUserDefault()->setIntegerForKey(key,v);
+		CCUserDefault::sharedUserDefault()->flush();
+	}
+
 	static bool bought(int type,int id);
 	static vector<int> getState(int type){return instance->data[type];}
 

@@ -1,5 +1,6 @@
 //#include "tool.h"ShopItem.cpp
 #include "tool.h"
+#include <string>
 char* conv(const char* str){
 //#ifdef WIN32
 	char* result = "error";
@@ -60,4 +61,17 @@ void callCharge(int type){
 			info.env->CallStaticVoidMethod(info.classID, info.methodID, type);
 		}
   #endif
+}
+
+bool checkPay(int index){
+	#if(CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+		JniMethodInfo info;
+		bool success = JniHelper::getStaticMethodInfo(info, "com/rhz/game/WestMiao", "checkPay", "(I)Z");
+
+		if(success){
+			jboolean pay = info.env->CallStaticBooleanMethod(info.classID,info.methodID,index);
+			return pay == JNI_TRUE;
+		}
+	#endif
+	return false;
 }

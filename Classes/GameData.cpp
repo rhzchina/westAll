@@ -5,17 +5,48 @@ GameData* GameData::instance = NULL;
 GameData::GameData(void)
 {
 	level = 1;
-	max = 1;
+	//最大解锁关
+	if(CCUserDefault::sharedUserDefault()->getIntegerForKey("max") == 0){
+		max = 1;
+	}else{
+		max = CCUserDefault::sharedUserDefault()->getIntegerForKey("max");
+	}
+
+	//最好成绩
+	if(CCUserDefault::sharedUserDefault()->getIntegerForKey("best") == 0){
+		best = 0;
+	}else{
+		best = CCUserDefault::sharedUserDefault()->getIntegerForKey("best");
+	}
+	
+	//当前货币 
+	if(CCUserDefault::sharedUserDefault()->getIntegerForKey("score") == 0){
+		score = 0;
+	}else{
+		score = CCUserDefault::sharedUserDefault()->getIntegerForKey("score");
+	}
+	int nums[] = {7,1,3,4};
+
 	gold = 0;
-	score = 0;
 	distance = 0;
-	best = 0;
 	loopCount = 0;
 	//memset(itemState,0,sizeof(itemState));
 	for(int i = 0;i < 4;i++){
 		data[i] = vector<int>();
-		for(int j = 0;j < 2;j++){
-			data[i].push_back(0);  //初始化，index = 0为当前持有，index = 1,值为0，是默认拥有第一个
+		for(int j = 0;j < nums[i] + 1;j++){ //第一个是当前装备的，因此循环要多一次
+			char key[50];
+			memset(key, 0, 50);
+			if(j == 0){
+				sprintf(key, "type%duse", i);
+				data[i].push_back(CCUserDefault::sharedUserDefault()->getIntegerForKey(key));
+			}else if (j == 1){
+				data[i].push_back(0);
+			}else{
+				sprintf(key, "type%d%jbuy",i, j - 1);
+				if(CCUserDefault::sharedUserDefault()->getBoolForKey(key)){
+					data[i].push_back(j - 1);
+				}
+			}
 		}
 	}
 }
@@ -52,9 +83,13 @@ void GameData::reset(bool all){
 		instance->score = 0;
 	}else{
 		instance->best = instance->best > instance->distance ? instance->best : instance->distance;		
+		CCUserDefault::sharedUserDefault()->setIntegerForKey("best", instance->best);
+		CCUserDefault::sharedUserDefault()->setIntegerForKey("score", instance->score);
+		CCUserDefault::sharedUserDefault()->setIntegerForKey("max", instance->max);
+		CCUserDefault::sharedUserDefault()->flush();
+
 	}
 	instance->loopCount = 0;
-
 	instance->distance = 0;
 	
 }
@@ -71,9 +106,9 @@ bool GameData::bought(int type,int id){
 
 void GameData::addDistance(int d){
 	instance->distance += d;
-	if(instance->distance > 5500){
+	if(instance->distance > 7500){
 		instance ->max = 4;
-	}else if(instance->distance > 4000){
+	}else if(instance->distance > 5500){
 		instance ->max = 3;
 	}else if(instance->distance > 2700){
 		instance ->max = 2;
