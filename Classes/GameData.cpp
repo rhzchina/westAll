@@ -4,6 +4,7 @@
 GameData* GameData::instance = NULL;
 bool GameData::checked = false;
 bool GameData::payForGame = false;
+bool GameData::music = true;
 
 GameData::GameData(void)
 {
@@ -71,6 +72,14 @@ GameData* GameData::getInstance(){
 		instance = new GameData();
 	}
 	return instance;
+}
+
+bool GameData::initInstance(){
+	if(instance == NULL){
+		instance = new GameData();
+		return true;
+	}
+	return false;
 }
 
 void GameData::addLevel(){

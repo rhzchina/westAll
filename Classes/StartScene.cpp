@@ -23,8 +23,6 @@ bool StartScene::init(){
 		SETANCHPOS(bg,0,0,0,0);
 		addChild(bg);
 
-		//初始化用户数据
-		GameData::getInstance();
 
 		CCSpriteFrameCache::sharedSpriteFrameCache()->addSpriteFramesWithFile("start.plist","start.png");
 		//游戏菜单
@@ -92,10 +90,19 @@ bool StartScene::init(){
 		sound->addChild(toggle);
 
 		//SimpleAudioEngine::sharedEngine()->preloadBackgroundMusic(CCFileUtils::sharedFileUtils()->fullPathFromRelativePath("game.ogg"));
-		if(checkPay(-1)){  //开启音乐
-			CocosDenshion::SimpleAudioEngine::sharedEngine()->playBackgroundMusic("game.ogg",true);
+		//初始化用户数据
+		if(GameData::initInstance()){
+			if(checkPay(-1)){  //开启音乐
+				GameData::music = true;
+				CocosDenshion::SimpleAudioEngine::sharedEngine()->playBackgroundMusic("game.ogg",true);
+			}else{
+				GameData::music = false;
+				toggle->setSelectedIndex(1);
+			}
 		}else{
-			toggle->setSelectedIndex(1);
+			if(!GameData::music){
+				toggle->setSelectedIndex(1);
+			}
 		}
 
 		success = true;
@@ -124,7 +131,6 @@ void StartScene::btnCallback(CCObject* sender){
 	switch(((CCNode*)sender)->getTag()){
 		//startBtn
 	case 1:
-		GameData::getInstance();
 		CCSpriteFrameCache::sharedSpriteFrameCache()->removeSpriteFrames();
 		CCDirector::sharedDirector()->replaceScene(SelectScene::scene());
 		break;
@@ -138,8 +144,10 @@ void StartScene::btnCallback(CCObject* sender){
 		break;
 	case 4:
 		if(((CCMenuItemToggle*)sender)->selectedItem() == soundOn){
+			GameData::music = false;
 			CocosDenshion::SimpleAudioEngine::sharedEngine()->pauseBackgroundMusic();
 		}else{
+			GameData::music = true;
 			if(CocosDenshion::SimpleAudioEngine::sharedEngine()->isBackgroundMusicPlaying()){
 				CocosDenshion::SimpleAudioEngine::sharedEngine()->resumeBackgroundMusic();
 			}else{

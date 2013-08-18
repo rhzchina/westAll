@@ -52,5 +52,7 @@ void AppDelegate::applicationWillEnterForeground()
 {
     CCDirector::sharedDirector()->startAnimation();
 
-    SimpleAudioEngine::sharedEngine()->resumeBackgroundMusic();
+	if(GameData::music){
+	    SimpleAudioEngine::sharedEngine()->resumeBackgroundMusic();
+	}
 }

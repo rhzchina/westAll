@@ -7,10 +7,12 @@ using namespace std;
 class GameData : public CCObject
 {
 public:
+	static bool music;
 	static bool checked;  //全局的变量记录是否已检测
 	static bool payForGame;  //已付费
 
 	static GameData* getInstance();
+	static bool initInstance();
 	~GameData();
 	static int getLevel();
 	static	void addLevel();
