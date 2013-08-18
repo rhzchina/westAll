@@ -310,6 +310,8 @@ CCRect Role::getWeaponRange(){
 void Role::setDie(CCLayer* parent){
 	CCSprite* temp = CCSprite::create("die.png");
 	SETANCHPOS(temp,hero->getPositionX(), hero->getPositionY(), hero->getAnchorPoint().x, hero->getAnchorPoint().y);
+	weapon->reset();
+	parent->removeChild(weapon,true);
 	parent->removeChild(hero, true);
 	hero = temp;
 	parent->addChild(hero,15);

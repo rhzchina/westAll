@@ -9,6 +9,7 @@ WelcomeScene::WelcomeScene(void)
 	itemsLayer = NULL;
 	itemsArray = NULL;
 	temp = NULL;
+	tipped = false;
 }
 
 
@@ -143,7 +144,10 @@ void WelcomeScene::btnCallback(CCObject* sender){
 					GameData::replaceSate(temp->getType(),temp->getId());
 					createItems(temp->getType(),scroll->getContentOffset().x);
 				}else{
-					tipText->setString(conv( "对不起您的仙桃不足，无法够买"));
+					if(!tipped){
+						tipText->setString(conv( "对不起您的仙桃不足，无法够买"));
+						tipped = true;
+					}
 				}
 			}else{
 				int chargeNum = 0;
@@ -176,6 +180,7 @@ void WelcomeScene::btnCallback(CCObject* sender){
 		break;
 	}
 	temp = NULL;
+	tipped = false;
 }
 
 void WelcomeScene::createItems(int type,float offset){
@@ -261,7 +266,6 @@ void WelcomeScene::createItems(int type,float offset){
 void WelcomeScene::ccTouchesBegan(CCSet* touches,CCEvent* event){
 	CCTouch* touch = (CCTouch*)touches->anyObject();
 	CCPoint location = CCDirector::sharedDirector()->convertToGL(touch->getLocationInView());
-
 	for(int i = 0;i < itemsArray->count();i++){
 		ShopItem* item = (ShopItem*)itemsArray->objectAtIndex(i);
 		if(item->isTouch(location.x - scroll->getPositionX() - scroll->getContentOffset().x,
@@ -288,37 +292,41 @@ void WelcomeScene::ccTouchesMoved(CCSet* touches,CCEvent* event){
 }
 
 void WelcomeScene::ccTouchesEnded(CCSet* touches,CCEvent* event){
-	CCTouch* touch = (CCTouch*)touches->anyObject();
-	CCPoint location = CCDirector::sharedDirector()->convertToGL(touch->getLocationInView());
-	if(touchId != -1){
-	for(int i = 0;i < itemsArray->count();i++){
-		ShopItem* item = (ShopItem*)itemsArray->objectAtIndex(i);
-		if(item->isTouch(location.x - scroll->getPositionX() - scroll->getContentOffset().x,
-			location.y - scroll->getPositionY())){
-				if(temp != NULL){
-					temp->setSelected(false);
-				}
-				if(item->getId() == touchId){
-					if(item->touchAction() == 0){
-						createItems(item->getType(),scroll->getContentOffset().x);
-						temp = NULL;
-					}else{
-						temp = item;
-						char t[100];
-						if(item->getValue() < 10){
-							sprintf(t,"购买物品需要%d元人民币，点击右侧的买入按钮即可购买",item->getValue());
-						}else{
-							sprintf(t,"购买物品需要%d仙桃，点击右侧的买入按钮即可购买",item->getValue());
-						}
-						tipText->setString(conv(t));
-						temp->setSelected(true);
+	if(temp != NULL && temp->getId() == touchId){
+	}else{
+		CCTouch* touch = (CCTouch*)touches->anyObject();
+		CCPoint location = CCDirector::sharedDirector()->convertToGL(touch->getLocationInView());
+		if(touchId != -1){
+		for(int i = 0;i < itemsArray->count();i++){
+			ShopItem* item = (ShopItem*)itemsArray->objectAtIndex(i);
+			if(item->isTouch(location.x - scroll->getPositionX() - scroll->getContentOffset().x,
+				location.y - scroll->getPositionY())){
+					if(temp != NULL){
+						temp->setSelected(false);
 					}
-				}
-				break;
+					if(item->getId() == touchId){
+						if(item->touchAction() == 0){
+							createItems(item->getType(),scroll->getContentOffset().x);
+							temp = NULL;
+						}else{
+							temp = item;
+							char t[100];
+							if(item->getValue() < 10){
+								sprintf(t,"购买物品需要%d元人民币，点击右侧的买入按钮即可购买",item->getValue());
+							}else{
+								sprintf(t,"购买物品需要%d仙桃，点击右侧的买入按钮即可购买",item->getValue());
+							}
+							tipText->setString(conv(t));
+							temp->setSelected(true);
+							tipped = false;
+						}
+					}
+					break;
+			}
 		}
+		}
+		touchId = -1;
 	}
-	}
-	touchId = -1;
 }
 
 void WelcomeScene::refresh(float dt){

@@ -45,9 +45,15 @@ ShopItem::ShopItem(int x,int y,const char* name,int v,int type, int id)
 	}
 	if (state == -1){ //此物品还未购买
 		char str[20];
-		sprintf(str,"%d",v);
-		CCLabelAtlas* valueText = CCLabelAtlas::create(str,"num/num_yellow.png",28,40,'0');
-
+		CCNode* valueText = NULL;
+		if(v > 1000){
+			sprintf(str,"%d",v);
+			valueText = CCLabelAtlas::create(str,"num/num_yellow.png",28,40,'0');
+		}else{
+			sprintf(str,"%d%s",v,conv("元"));
+			valueText = CCLabelTTF::create(str,"arial",35);
+			((CCLabelTTF*)valueText)->setColor(ccc3(102,17,17));
+		}
 		SETANCHPOS(valueText,bg->getContentSize().width / 2,20,0.5,0);
 		layer->addChild(valueText);
 	}else{  //此物品已购买

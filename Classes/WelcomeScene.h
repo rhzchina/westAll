@@ -31,6 +31,7 @@ private:
 	CCLabelAtlas* goldNum;
 	CCArray* itemsArray;
 	int touchId;
+	bool tipped;
 	CCPoint lastPt;
 	CCLabelTTF* tipText;
 	ShopItem* temp;

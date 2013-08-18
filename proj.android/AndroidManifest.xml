@@ -10,7 +10,7 @@
         </activity>
         		<activity android:name="cn.cmgame.billing.ui.GameOpenActivity"
 			android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
-			android:screenOrientation="sensor">
+			android:screenOrientation="landscape">
 			<intent-filter>
 				<action android:name="android.intent.action.MAIN" />
 				<category android:name="android.intent.category.LAUNCHER" />
