@@ -26,74 +26,116 @@ package com.rhz.game;
 import org.cocos2dx.lib.Cocos2dxActivity;
 import org.cocos2dx.lib.Cocos2dxHelper;
 
-import cn.cmgame.billing.api.GameInterface;
-import cn.cmgame.billing.api.GameInterface.BillingCallback;
+import cn.game189.sms.SMS;
+import cn.game189.sms.SMSListener;
 
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.os.Process;
-import android.widget.ProgressBar;
 import android.widget.Toast;
 
 public class WestMiao extends Cocos2dxActivity{
 	private static WestMiao instance;
+	private static String[] code = {
+		"0211C0945611022216975111022216906001MC090000000000000000000000000000",
+		"0211C0945611022216975111022216906101MC090000000000000000000000000000",
+		"0211C0945611022216975111022216906201MC090000000000000000000000000000",
+		"0211C0945611022216975111022216905801MC090000000000000000000000000000",
+		"0211C0945611022216975111022216905901MC090000000000000000000000000000"
+	};
+	
+	private static Handler handle = new Handler(){
+		@Override
+		public void handleMessage(Message msg){
+			System.out.println("++++++++++++++++");
+			final int chargeNum = msg.what;
+					 if(SMS.checkFee("game_00" + chargeNum, instance, new SMSListener() {
+//				
+				@Override
+				public void smsOK(String arg0) {
+					JniCall.callCMethod(chargeNum);
+				}
+				
+				@Override
+				public void smsFail(String arg0, int arg1) {
+					
+					Toast.makeText(instance, arg0, Toast.LENGTH_LONG).show();
+				}
+				
+				@Override
+				public void smsCancel(String arg0, int arg1) {
+					if(chargeNum > 1){
+						JniCall.callCMethod(-1);
+					}else if(chargeNum == 1){
+						//JniCall.callCMethod(-2);
+					}
+					
+				}
+			}, code[chargeNum - 1] , "购买 道具，发送一条2元短信，不含信息费", "购买成功，祝您 游戏愉快！~", false)){
+			 }else{
+				System.out.println("--------------------" + SMS.getResult()); 
+				
+			 }
+		}
+		
+	};
 
 	protected void onCreate(Bundle savedInstanceState){
 		super.onCreate(savedInstanceState);
 		instance = this;
-		GameInterface.initializeApp(this);
-	}
-	
-	
+		SMS.gameStart(this);
+	} 
 	public static void exitGame() {
-		GameInterface.exit(instance, new GameInterface.GameExitCallback() {
-			@Override
-			public void onConfirmExit() {
-				Cocos2dxHelper.end();
-				Process.killProcess(android.os.Process.myPid());
-			}
+		SMS.gameExit(instance);
 	
-			@Override
-			public void onCancelExit() {
-			}
-		});
 	}
 	
-	public static void doCharge(final int chargeNum){
+	public static boolean doCharge(final int chargeNum){
 		System.out.println("the charge point is 00" + chargeNum);
 		if(chargeNum == -1){
 			exitGame();
+			return false;
 		}else{
-			GameInterface.doBilling(instance, true, false, "00" + chargeNum, new BillingCallback() {
-				
-				@Override
-				public void onUserOperCancel(String arg0) {
-					if(chargeNum > 1){
-						JniCall.callCMethod(-1);
-					}else if(chargeNum == 1){
-						JniCall.callCMethod(-2);
-					}
-				}
-				
-				@Override
-				public void onBillingSuccess(String arg0) {
-					JniCall.callCMethod(chargeNum);
-					Toast.makeText(instance, "购买成功，祝您游戏愉快!~", Toast.LENGTH_LONG).show();
-				}
-				
-				@Override
-				public void onBillingFail(String arg0) {
-					Toast.makeText(instance, arg0, Toast.LENGTH_LONG).show();
-					
-				}
-			});
+//			 if(SMS.checkFee("game_00" + chargeNum, instance, new SMSListener() {
+//				
+//				@Override
+//				public void smsOK(String arg0) {
+//					JniCall.callCMethod(chargeNum);
+//				}
+//				
+//				@Override
+//				public void smsFail(String arg0, int arg1) {
+//					
+//					Toast.makeText(instance, arg0, Toast.LENGTH_LONG).show();
+//				}
+//				
+//				@Override
+//				public void smsCancel(String arg0, int arg1) {
+//					if(chargeNum > 1){
+//						JniCall.callCMethod(-1);
+//					}else if(chargeNum == 1){
+//						JniCall.callCMethod(-2);
+//					}
+//					
+//				}
+//			}, code[chargeNum - 1] , "购买 道具，发送一条2元短信，不含信息费", "购买成功，祝您 游戏愉快！~", false)){
+//				 return true;
+//			 }else{
+//				System.out.println("--------------------" + SMS.getResult()); 
+//				
+//				return false;
+//			 }
+			handle.sendEmptyMessage(chargeNum);
+			return false;
 		}
 	}
 	
 	public static boolean checkPay(int index){
 		if(index == -1){  //用来获取是否开启声音，同用此函数
-			return GameInterface.isMusicEnabled();
+			return true;
 		}else{
-			return GameInterface.getActivateFlag("00" + index);
+			return doCharge(index);
 		}
 	}
 	

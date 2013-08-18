@@ -23,11 +23,7 @@ THE SOFTWARE.
  ****************************************************************************/
 package org.cocos2dx.lib;
 
-import com.rhz.game.WestMiao;
-
-import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.opengl.GLSurfaceView;
 import android.os.Handler;
 import android.os.Message;
@@ -36,6 +32,8 @@ import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.inputmethod.InputMethodManager;
+
+import com.rhz.game.WestMiao;
 
 public class Cocos2dxGLSurfaceView extends GLSurfaceView {
 	// ===========================================================

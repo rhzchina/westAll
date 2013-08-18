@@ -55,7 +55,7 @@ CCAnimate* createAni(const char* preName, int count,float unit,bool zero){
 void callCharge(int type){
   #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
 		JniMethodInfo info;
-		bool success = JniHelper::getStaticMethodInfo(info,"com/rhz/game/WestMiao","doCharge","(I)V");
+		bool success = JniHelper::getStaticMethodInfo(info,"com/rhz/game/WestMiao","doCharge","(I)Z");
 
 		if(success){
 			info.env->CallStaticVoidMethod(info.classID, info.methodID, type);
