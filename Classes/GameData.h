@@ -4,9 +4,12 @@
 USING_NS_CC;
 using namespace std;
 
-class GameData
+class GameData : public CCObject
 {
 public:
+	static bool checked;  //全局的变量记录是否已检测
+	static bool payForGame;  //已付费
+
 	static GameData* getInstance();
 	~GameData();
 	static int getLevel();
@@ -58,6 +61,7 @@ public:
 
 	static void addLoop(){instance->loopCount++;}
 	static long getLoop(){return instance->loopCount;}
+	void callPay(float dt);
 private:
 	GameData(void);
 	int level;
@@ -69,5 +73,6 @@ private:
 	vector<int> data[4];
 	long loopCount;  //循环计数
 	static GameData* instance;
+	
 };
 #endif                                                    

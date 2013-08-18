@@ -7,5 +7,10 @@ JNIEXPORT void JNICALL Java_com_rhz_game_JniCall_callCMethod
 	int result = type;
 	if(type > 1){
 		CCDirector::sharedDirector()->getScheduler()->scheduleSelector(schedule_selector(WelcomeScene::refresh),WelcomeScene::instance,0,false,0,0);
+	}else if(type == 1){  //正版 激活
+	}else if (type == -1){//取消
+		WelcomeScene::instance->reset();
+	}else if (type == -2){
+		CCDirector::sharedDirector()->end();
 	}
 }

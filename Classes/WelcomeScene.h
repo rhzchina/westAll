@@ -25,6 +25,8 @@ public:
 	void btnCallback(CCObject*);
 	void refresh(float dt);
 	void createItems(int type,float off = 0);
+	void reset(){tipped = false;}
+
 private:
 	CCScrollView* scroll;
 	CCLayer* itemsLayer;

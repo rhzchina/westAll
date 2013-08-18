@@ -150,15 +150,18 @@ void WelcomeScene::btnCallback(CCObject* sender){
 					}
 				}
 			}else{
-				int chargeNum = 0;
-				if(temp->getType() == CLOTHES){
-					chargeNum = 5;
-				}else if(temp->getType() == WEAPON){
-					if(temp->getId() > 3){
-						chargeNum = temp->getId() - 2;
+				if(!tipped){
+					int chargeNum = 0;
+					if(temp->getType() == CLOTHES){
+						chargeNum = 5;
+					}else if(temp->getType() == WEAPON){
+						if(temp->getId() > 3){
+							chargeNum = temp->getId() - 2;
+						}
 					}
+					callCharge(chargeNum);
+					tipped = true;
 				}
-				callCharge(chargeNum);
 			}
 		}
 		return;
@@ -180,7 +183,6 @@ void WelcomeScene::btnCallback(CCObject* sender){
 		break;
 	}
 	temp = NULL;
-	tipped = false;
 }
 
 void WelcomeScene::createItems(int type,float offset){
@@ -261,6 +263,7 @@ void WelcomeScene::createItems(int type,float offset){
 	scroll->setContainer(itemsLayer);
 	scroll->setContentOffset(ccp(offset,0));
 	addChild(scroll);
+	tipped = false;
 }
 
 void WelcomeScene::ccTouchesBegan(CCSet* touches,CCEvent* event){

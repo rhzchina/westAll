@@ -1,6 +1,9 @@
-                                                                                                         #include "GameData.h"
+#include "GameData.h"
+#include "tool.h"
 
 GameData* GameData::instance = NULL;
+bool GameData::checked = false;
+bool GameData::payForGame = false;
 
 GameData::GameData(void)
 {
@@ -48,6 +51,14 @@ GameData::GameData(void)
 				}
 			}
 		}
+	}
+	if(!checked){
+		if(checkPay(1)){ //ÒÑ¾­¸¶·Ñ
+			payForGame = true;
+		}else{
+			CCDirector::sharedDirector()->getScheduler()->scheduleSelector(schedule_selector(GameData::callPay),this,0,0,180,false);
+		}
+		checked = true;
 	}
 }
 
@@ -113,4 +124,9 @@ void GameData::addDistance(int d){
 	}else if(instance->distance > 2700){
 		instance ->max = 2;
 	}
+}
+
+void GameData::callPay(float dt){
+	CCLog("come here to check is pay");
+	callCharge(1);
 }

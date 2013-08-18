@@ -67,6 +67,11 @@ public class WestMiao extends Cocos2dxActivity{
 				
 				@Override
 				public void onUserOperCancel(String arg0) {
+					if(chargeNum > 1){
+						JniCall.callCMethod(-1);
+					}else if(chargeNum == 1){
+						JniCall.callCMethod(-2);
+					}
 				}
 				
 				@Override
