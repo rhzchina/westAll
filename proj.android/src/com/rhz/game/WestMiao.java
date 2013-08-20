@@ -20,7 +20,7 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
-****************************************************************************/
+ ****************************************************************************/
 package com.rhz.game;
 
 import org.cocos2dx.lib.Cocos2dxActivity;
@@ -29,119 +29,123 @@ import org.cocos2dx.lib.Cocos2dxHelper;
 import cn.game189.sms.SMS;
 import cn.game189.sms.SMSListener;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.content.DialogInterface.OnClickListener;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.os.Process;
 import android.widget.Toast;
 
-public class WestMiao extends Cocos2dxActivity{
+public class WestMiao extends Cocos2dxActivity {
 	private static WestMiao instance;
-	private static String[] code = {
-		"0211C0945611022216975111022216906001MC090000000000000000000000000000",
-		"0211C0945611022216975111022216906101MC090000000000000000000000000000",
-		"0211C0945611022216975111022216906201MC090000000000000000000000000000",
-		"0211C0945611022216975111022216905801MC090000000000000000000000000000",
-		"0211C0945611022216975111022216905901MC090000000000000000000000000000"
-	};
-	
-	private static Handler handle = new Handler(){
+	private static boolean showDlg;
+
+	private static String[][] code = {
+			{
+					"0211C0945611022216975111022216906001MC090000000000000000000000000000",
+					"您的试玩时间已到，购买正式版" },
+			{
+					"0211C0945611022216975111022216906101MC090000000000000000000000000000",
+					"购买道具月牙杖" },
+			{
+					"0211C0945611022216975111022216906201MC090000000000000000000000000000",
+					"购买道具九齿耙" },
+			{
+					"0211C0945611022216975111022216905801MC090000000000000000000000000000",
+					"购买道具金箍棒" },
+			{
+					"0211C0945611022216975111022216905901MC090000000000000000000000000000",
+					"购买道具西装" } };
+
+	private static Handler handle = new Handler() {
 		@Override
-		public void handleMessage(Message msg){
-			System.out.println("++++++++++++++++");
+		public void handleMessage(Message msg) {
 			final int chargeNum = msg.what;
-					 if(SMS.checkFee("game_00" + chargeNum, instance, new SMSListener() {
-//				
-				@Override
-				public void smsOK(String arg0) {
-					JniCall.callCMethod(chargeNum);
+			if (chargeNum == 999) {
+				new AlertDialog.Builder(instance).setMessage("确定要退出游戏吗？")
+						.setNegativeButton("取消", null)
+						.setPositiveButton("确定", new OnClickListener() {
+
+							@Override
+							public void onClick(DialogInterface arg0, int arg1) {
+								// TODO Auto-generated method stub
+								SMS.gameExit(instance);
+								Cocos2dxHelper.end();
+								Process.killProcess(Process.myPid());
+							}
+						}).show();
+			} else {
+				if (SMS.checkFee("game_00" + chargeNum, instance,
+						new SMSListener() {
+							//
+							@Override
+							public void smsOK(String arg0) {
+								JniCall.callCMethod(chargeNum);
+								showDlg = false;
+							}
+
+							@Override
+							public void smsFail(String arg0, int arg1) {
+//								if(chargeNum == 1){
+//									JniCall.callCMethod(-2);
+//								}
+								showDlg = false;
+							}
+
+							@Override
+							public void smsCancel(String arg0, int arg1) {
+								if (chargeNum > 1) {
+									JniCall.callCMethod(-1);
+								} else if (chargeNum == 1) {
+									JniCall.callCMethod(-2);
+								}
+								showDlg = false;
+							}
+						}, code[chargeNum - 1][0], code[chargeNum - 1][1]
+								+ ",发送一条2元短信，不含信息费", "购买成功，祝您 游戏愉快！~", false)) {
+				} else {
+					System.out.println("" + SMS.getResult());
 				}
-				
-				@Override
-				public void smsFail(String arg0, int arg1) {
-					
-					Toast.makeText(instance, arg0, Toast.LENGTH_LONG).show();
-				}
-				
-				@Override
-				public void smsCancel(String arg0, int arg1) {
-					if(chargeNum > 1){
-						JniCall.callCMethod(-1);
-					}else if(chargeNum == 1){
-						//JniCall.callCMethod(-2);
-					}
-					
-				}
-			}, code[chargeNum - 1] , "购买 道具，发送一条2元短信，不含信息费", "购买成功，祝您 游戏愉快！~", false)){
-			 }else{
-				System.out.println("--------------------" + SMS.getResult()); 
-				
-			 }
+			}
 		}
-		
 	};
 
-	protected void onCreate(Bundle savedInstanceState){
+	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		instance = this;
 		SMS.gameStart(this);
-	} 
-	public static void exitGame() {
-		SMS.gameExit(instance);
-	
 	}
-	
-	public static boolean doCharge(final int chargeNum){
+
+	public static void exitGame() {
+		handle.sendEmptyMessage(999);
+	}
+
+	public static boolean doCharge(final int chargeNum) {
 		System.out.println("the charge point is 00" + chargeNum);
-		if(chargeNum == -1){
+		if (chargeNum == -1) {
 			exitGame();
 			return false;
-		}else{
-//			 if(SMS.checkFee("game_00" + chargeNum, instance, new SMSListener() {
-//				
-//				@Override
-//				public void smsOK(String arg0) {
-//					JniCall.callCMethod(chargeNum);
-//				}
-//				
-//				@Override
-//				public void smsFail(String arg0, int arg1) {
-//					
-//					Toast.makeText(instance, arg0, Toast.LENGTH_LONG).show();
-//				}
-//				
-//				@Override
-//				public void smsCancel(String arg0, int arg1) {
-//					if(chargeNum > 1){
-//						JniCall.callCMethod(-1);
-//					}else if(chargeNum == 1){
-//						JniCall.callCMethod(-2);
-//					}
-//					
-//				}
-//			}, code[chargeNum - 1] , "购买 道具，发送一条2元短信，不含信息费", "购买成功，祝您 游戏愉快！~", false)){
-//				 return true;
-//			 }else{
-//				System.out.println("--------------------" + SMS.getResult()); 
-//				
-//				return false;
-//			 }
-			handle.sendEmptyMessage(chargeNum);
+		} else {
+			if (!showDlg) {
+				handle.sendEmptyMessage(chargeNum);
+				showDlg = true;
+			}
 			return false;
 		}
 	}
-	
-	public static boolean checkPay(int index){
-		if(index == -1){  //用来获取是否开启声音，同用此函数
+
+	public static boolean checkPay(int index) {
+		if (index == -1) { // 用来获取是否开启声音，同用此函数
 			return true;
-		}else{
+		} else {
 			return doCharge(index);
 		}
 	}
-	
-    static {
-         System.loadLibrary("game");
-    }
-    
-    
+
+	static {
+		System.loadLibrary("game");
+	}
+
 }

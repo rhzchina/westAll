@@ -3,6 +3,7 @@
 #include "AppDelegate.h"
 #include "GameScene.h"
 #include "StartScene.h"
+#include "LogoScene.h"
 #include "SimpleAudioEngine.h"
 
 using namespace CocosDenshion;
@@ -31,7 +32,7 @@ bool AppDelegate::applicationDidFinishLaunching()
     pDirector->setAnimationInterval(1.0 / 60);
 
     // create a scene. it's an autorelease object
-    CCScene *pScene = StartScene::scene();
+    CCScene *pScene = LogoScene::scene();
 	CCEGLView::sharedOpenGLView()->setDesignResolutionSize(854, 480, kResolutionExactFit);
 
     // run
@@ -51,6 +52,7 @@ void AppDelegate::applicationDidEnterBackground()
 void AppDelegate::applicationWillEnterForeground()
 {
     CCDirector::sharedDirector()->startAnimation();
-
-    SimpleAudioEngine::sharedEngine()->resumeBackgroundMusic();
+	if(GameData::music){
+		SimpleAudioEngine::sharedEngine()->resumeBackgroundMusic();
+	}
 }

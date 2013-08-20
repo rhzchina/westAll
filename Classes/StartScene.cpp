@@ -92,7 +92,7 @@ bool StartScene::init(){
 		sound->addChild(toggle);
 
 		//SimpleAudioEngine::sharedEngine()->preloadBackgroundMusic(CCFileUtils::sharedFileUtils()->fullPathFromRelativePath("game.ogg"));
-		if(checkPay(-1)){  //¿ªÆôÒôÀÖ
+		if(GameData::music){
 			CocosDenshion::SimpleAudioEngine::sharedEngine()->playBackgroundMusic("game.ogg",true);
 		}else{
 			toggle->setSelectedIndex(1);
@@ -139,7 +139,9 @@ void StartScene::btnCallback(CCObject* sender){
 	case 4:
 		if(((CCMenuItemToggle*)sender)->selectedItem() == soundOn){
 			CocosDenshion::SimpleAudioEngine::sharedEngine()->pauseBackgroundMusic();
+			GameData::music = false;
 		}else{
+			GameData::music = true;
 			if(CocosDenshion::SimpleAudioEngine::sharedEngine()->isBackgroundMusicPlaying()){
 				CocosDenshion::SimpleAudioEngine::sharedEngine()->resumeBackgroundMusic();
 			}else{

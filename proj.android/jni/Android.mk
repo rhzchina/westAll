@@ -18,6 +18,7 @@ LOCAL_SRC_FILES := hellocpp/main.cpp \
 				   ../../Classes/ShopItem.cpp \
 				   ../../Classes/tool.cpp \
 				   ../../Classes/Prop.cpp \
+				   ../../Classes/LogoScene.cpp \
 				   ../../Classes/com_rhz_game_JniCall.cpp
                    
                    

@@ -9,7 +9,7 @@ class GameData : public CCObject
 public:
 	static bool checked;  //全局的变量记录是否已检测
 	static bool payForGame;  //已付费
-
+	static bool music;
 	static GameData* getInstance();
 	~GameData();
 	static int getLevel();

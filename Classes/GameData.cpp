@@ -4,6 +4,7 @@
 GameData* GameData::instance = NULL;
 bool GameData::checked = false;
 bool GameData::payForGame = false;
+bool GameData::music = true;
 
 GameData::GameData(void)
 {
@@ -53,11 +54,7 @@ GameData::GameData(void)
 		}
 	}
 	if(!checked){
-		if(checkPay(1)){ //ÒÑ¾­¸¶·Ñ
-			payForGame = true;
-		}else{
-			CCDirector::sharedDirector()->getScheduler()->scheduleSelector(schedule_selector(GameData::callPay),this,0,0,180,false);
-		}
+		CCDirector::sharedDirector()->getScheduler()->scheduleSelector(schedule_selector(GameData::callPay),this,0,0,180,false);
 		checked = true;
 	}
 }
