@@ -91,7 +91,7 @@ bool StartScene::init(){
 
 		//SimpleAudioEngine::sharedEngine()->preloadBackgroundMusic(CCFileUtils::sharedFileUtils()->fullPathFromRelativePath("game.ogg"));
 		//初始化用户数据
-		if(GameData::initInstance()){
+		if(GameData::initInstance(!GameData::payForGame)){
 			if(checkPay(-1)){  //开启音乐
 				GameData::music = true;
 				CocosDenshion::SimpleAudioEngine::sharedEngine()->playBackgroundMusic("game.ogg",true);

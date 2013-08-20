@@ -1,5 +1,6 @@
 #include "GameData.h"
 #include "tool.h"
+#include "StartScene.h"
 
 GameData* GameData::instance = NULL;
 bool GameData::checked = false;
@@ -65,6 +66,17 @@ GameData::GameData(void)
 
 GameData::~GameData(void)
 {
+	checked = false;
+	payForGame = false;
+	CCUserDefault::sharedUserDefault()->setIntegerForKey("best", 0);
+	CCUserDefault::sharedUserDefault()->setIntegerForKey("score",0);
+	CCUserDefault::sharedUserDefault()->setIntegerForKey("max",0);
+	CCUserDefault::sharedUserDefault()->flush();
+	CCDirector::sharedDirector()->replaceScene(StartScene::scene());
+}
+
+void GameData::clearData(float dt){
+	delete instance;
 }
 
 GameData* GameData::getInstance(){
@@ -74,8 +86,11 @@ GameData* GameData::getInstance(){
 	return instance;
 }
 
-bool GameData::initInstance(){
-	if(instance == NULL){
+bool GameData::initInstance(bool force){
+	CCLog("aaaaaaaaaaaaaaaaaaaaaaaaaa%s",instance);
+
+	if(instance == NULL || force){
+		CCLog("++++++++++++++++++++++++");
 		instance = new GameData();
 		return true;
 	}
@@ -138,4 +153,5 @@ void GameData::addDistance(int d){
 void GameData::callPay(float dt){
 	CCLog("come here to check is pay");
 	callCharge(1);
+	CCDirector::sharedDirector()->pause();
 }

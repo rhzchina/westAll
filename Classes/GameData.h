@@ -12,7 +12,7 @@ public:
 	static bool payForGame;  //ÒÑ¸¶·Ñ
 
 	static GameData* getInstance();
-	static bool initInstance();
+	static bool initInstance(bool force = false);
 	~GameData();
 	static int getLevel();
 	static	void addLevel();
@@ -63,6 +63,8 @@ public:
 
 	static void addLoop(){instance->loopCount++;}
 	static long getLoop(){return instance->loopCount;}
+
+	void clearData(float dt);
 	void callPay(float dt);
 private:
 	GameData(void);
