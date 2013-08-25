@@ -148,6 +148,7 @@ void StartScene::btnCallback(CCObject* sender){
 			CocosDenshion::SimpleAudioEngine::sharedEngine()->pauseBackgroundMusic();
 		}else{
 			GameData::music = true;
+
 			if(CocosDenshion::SimpleAudioEngine::sharedEngine()->isBackgroundMusicPlaying()){
 				CocosDenshion::SimpleAudioEngine::sharedEngine()->resumeBackgroundMusic();
 			}else{

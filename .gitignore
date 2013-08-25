@@ -4,7 +4,10 @@ obj/
 Debug.win32/
 ipch/
 *sdf
+<<<<<<< HEAD
 *so
 *sh
 *assets/
 *properties
+=======
+>>>>>>> 931485f5826a13f99e8df50592c1ab4d7d8c3b33

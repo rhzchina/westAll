@@ -2,6 +2,7 @@
 #include "WelcomeScene.h"
 #include "GameData.h"
 #include "StartScene.h"
+
 #include "tool.h"
 
 JNIEXPORT void JNICALL Java_com_rhz_game_JniCall_callCMethod
