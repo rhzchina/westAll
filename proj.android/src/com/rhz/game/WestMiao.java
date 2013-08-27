@@ -29,6 +29,8 @@ import org.cocos2dx.lib.Cocos2dxHelper;
 import cn.cmgame.billing.api.GameInterface;
 import cn.cmgame.billing.api.GameInterface.BillingCallback;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Process;
 import android.widget.ProgressBar;
@@ -63,7 +65,9 @@ public class WestMiao extends Cocos2dxActivity{
 		if(chargeNum == -1){
 			exitGame();
 		}else if(chargeNum == -2){  //更多游戏
-			
+			Uri uri = Uri.parse("http://google.com");  
+			Intent it = new Intent(Intent.ACTION_VIEW, uri);  
+			instance.startActivity(it);
 		}else{
 			GameInterface.doBilling(instance, true, false, "00" + chargeNum, new BillingCallback() {
 				
