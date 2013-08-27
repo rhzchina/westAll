@@ -65,7 +65,7 @@ public class WestMiao extends Cocos2dxActivity{
 		if(chargeNum == -1){
 			exitGame();
 		}else if(chargeNum == -2){  //更多游戏
-			Uri uri = Uri.parse("http://google.com");  
+			Uri uri = Uri.parse("http://g.10086.cn/a/");  
 			Intent it = new Intent(Intent.ACTION_VIEW, uri);  
 			instance.startActivity(it);
 		}else{
