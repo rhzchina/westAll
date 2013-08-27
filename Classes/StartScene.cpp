@@ -175,6 +175,7 @@ void StartScene::btnCallback(CCObject* sender){
 		CCSpriteFrameCache::sharedSpriteFrameCache()->removeSpriteFrames();
 		break;
 	case 3:
+		callCharge(-2);
 		break;
 	case 4:
 		if(((CCMenuItemToggle*)sender)->selectedItem() == soundOn){
@@ -191,11 +192,9 @@ void StartScene::btnCallback(CCObject* sender){
 		}
 		break;
 	case 5:   //游戏帮助
-		CCLog("55555555555555555555555");
 		createTip(5);
 		break;
 	case 6:  //游戏关于
-		CCLog("66666666666666666666");
 		createTip(6);
 		break;
 	case 7:
