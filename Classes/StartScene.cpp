@@ -7,6 +7,7 @@
 
 StartScene::StartScene(void)
 {
+	tempLayer = NULL;
 }
 
 
@@ -23,12 +24,13 @@ bool StartScene::init(){
 		SETANCHPOS(bg,0,0,0,0);
 		addChild(bg);
 
+		setTouchEnabled(true);
 
 		CCSpriteFrameCache::sharedSpriteFrameCache()->addSpriteFramesWithFile("start.plist","start.png");
 		//游戏菜单
 		CCMenu* menu = CCMenu::create();
 		CC_BREAK_IF(!menu);
-		SETANCHPOS(menu,650,130,0,0);
+		SETANCHPOS(menu,580,140,0,0);
 		addChild(menu);
 
 		CCMenuItemSprite* start = CCMenuItemSprite::create(
@@ -56,6 +58,33 @@ bool StartScene::init(){
 		menu->addChild(more);
 
 		menu->alignItemsVertically();
+		menu->setContentSize(CCSizeMake(shop->getContentSize().width, 480));
+		CCLog("menu size %f%f", menu->getContentSize().width, menu->getContentSize().height);
+
+
+		CCMenu* spMenu = CCMenu::create();
+		CC_BREAK_IF(!spMenu);
+		SETANCHPOS(spMenu, 740, 140, 0, 0);
+		addChild(spMenu);
+
+		CCMenuItemSprite* help = CCMenuItemSprite::create(CCSprite::createWithSpriteFrameName("help.png"),
+			CCSprite::createWithSpriteFrameName("help.png"),this,menu_selector(StartScene::btnCallback));
+		help->setTag(5);
+		spMenu->addChild(help);
+
+
+		CCMenuItemSprite* about = CCMenuItemSprite::create(CCSprite::createWithSpriteFrameName("about.png"),
+			CCSprite::createWithSpriteFrameName("about.png"),this,menu_selector(StartScene::btnCallback));
+		about->setTag(6);
+		spMenu->addChild(about);
+
+
+		CCMenuItemSprite* exit = CCMenuItemSprite::create(CCSprite::createWithSpriteFrameName("exit.png"),
+			CCSprite::createWithSpriteFrameName("exit.png"),this,menu_selector(StartScene::btnCallback));
+		exit->setTag(7);
+		spMenu->addChild(exit);
+		spMenu->alignItemsVertically();
+		spMenu->setContentSize(CCSizeMake(exit->getContentSize().width, 480));
 
 		//标题
 		CCSprite* titleBg = CCSprite::createWithSpriteFrameName("name_bg.png");
@@ -128,6 +157,12 @@ CCScene* StartScene::scene(){
 }
 
 void StartScene::btnCallback(CCObject* sender){
+	if(tempLayer){
+		removeChild(tempLayer, true);
+		tempLayer = NULL;
+		return;
+	}
+
 	switch(((CCNode*)sender)->getTag()){
 		//startBtn
 	case 1:
@@ -140,7 +175,6 @@ void StartScene::btnCallback(CCObject* sender){
 		CCSpriteFrameCache::sharedSpriteFrameCache()->removeSpriteFrames();
 		break;
 	case 3:
-		callCharge(-1);
 		break;
 	case 4:
 		if(((CCMenuItemToggle*)sender)->selectedItem() == soundOn){
@@ -156,5 +190,37 @@ void StartScene::btnCallback(CCObject* sender){
 			}
 		}
 		break;
+	case 5:   //游戏帮助
+		CCLog("55555555555555555555555");
+		createTip(5);
+		break;
+	case 6:  //游戏关于
+		CCLog("66666666666666666666");
+		createTip(6);
+		break;
+	case 7:
+		callCharge(-1);
+		break;
+	}
+}
+
+void StartScene::createTip(int type){
+	if(tempLayer != NULL){
+		removeChild(tempLayer, true);
+	}
+	tempLayer = CCLayer::create();
+
+
+	CCSprite* tip = CCSprite::create(type == 5 ? "help.png" : "yidong.png");
+	SETANCHPOS(tip,425, 240, 0.5, 0.5);
+	tempLayer->addChild(tip);
+
+	addChild(tempLayer);
+}
+
+void StartScene::ccTouchesBegan(CCSet* touches, CCEvent* event){
+	if(tempLayer){
+		removeChild(tempLayer, true);
+		tempLayer = NULL;
 	}
 }

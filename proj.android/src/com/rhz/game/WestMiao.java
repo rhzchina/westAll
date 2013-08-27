@@ -62,6 +62,8 @@ public class WestMiao extends Cocos2dxActivity{
 		System.out.println("the charge point is 00" + chargeNum);
 		if(chargeNum == -1){
 			exitGame();
+		}else if(chargeNum == -2){  //更多游戏
+			
 		}else{
 			GameInterface.doBilling(instance, true, false, "00" + chargeNum, new BillingCallback() {
 				

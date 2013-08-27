@@ -15,10 +15,13 @@ public:
 	bool init();
 	void btnCallback(CCObject*);
 	static CCScene* scene();
+	void createTip(int type);
+	void ccTouchesBegan(CCSet*, CCEvent*);
 
 private:
 	CCMenuItemSprite* soundOn;
 	CCMenuItemSprite* soundOff;
+	CCLayer* tempLayer;
 };
 
 #endif
