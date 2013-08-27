@@ -26,15 +26,12 @@ package com.rhz.game;
 import org.cocos2dx.lib.Cocos2dxActivity;
 import org.cocos2dx.lib.Cocos2dxHelper;
 
-import cn.cmgame.billing.api.GameInterface;
-import cn.cmgame.billing.api.GameInterface.BillingCallback;
-
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Process;
-import android.widget.ProgressBar;
 import android.widget.Toast;
+import cn.cmgame.billing.api.GameInterface;
+import cn.cmgame.billing.api.GameInterface.BillingCallback;
 
 public class WestMiao extends Cocos2dxActivity{
 	private static WestMiao instance;
@@ -51,7 +48,7 @@ public class WestMiao extends Cocos2dxActivity{
 			@Override
 			public void onConfirmExit() {
 				Cocos2dxHelper.end();
-				Process.killProcess(android.os.Process.myPid());
+				android.os.Process.killProcess(android.os.Process.myPid());
 			}
 	
 			@Override
