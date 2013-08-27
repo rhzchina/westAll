@@ -58,7 +58,6 @@ bool SelectScene::init(){
 			SETANCHPOS(levelName,x + 854 / 2 - itemBg->getContentSize().width / 2,240,0.5,0.5);
 			container->addChild(levelName);
 
-
 			if(i <= GameData::getMaxLevel()){
 				sprintf(name,"level%d.png",i);
 			}else{

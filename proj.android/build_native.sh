@@ -1,5 +1,5 @@
 APPNAME="West"
-
+NDK_ROOT=/cygdrive/d/ide/android/android-ndk-r8e
 # options
 
 buildexternalsfromsource=

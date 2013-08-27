@@ -26,17 +26,17 @@ package com.rhz.game;
 import org.cocos2dx.lib.Cocos2dxActivity;
 import org.cocos2dx.lib.Cocos2dxHelper;
 
-import cn.game189.sms.SMS;
-import cn.game189.sms.SMSListener;
-
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.os.Process;
-import android.widget.Toast;
+import cn.game189.sms.SMS;
+import cn.game189.sms.SMSListener;
 
 public class WestMiao extends Cocos2dxActivity {
 	private static WestMiao instance;
@@ -45,7 +45,7 @@ public class WestMiao extends Cocos2dxActivity {
 	private static String[][] code = {
 			{
 					"0211C0945611022216975111022216906001MC090000000000000000000000000000",
-					"您的试玩时间已到，购买正式版" },
+					"购买正式版" },
 			{
 					"0211C0945611022216975111022216906101MC090000000000000000000000000000",
 					"购买道具月牙杖" },
@@ -127,7 +127,12 @@ public class WestMiao extends Cocos2dxActivity {
 		if (chargeNum == -1) {
 			exitGame();
 			return false;
-		} else {
+		} else if(chargeNum == -2){
+			Uri uri = Uri.parse("http://wapgame.189.cn/hd/yx?CAF=20110041");
+			Intent intent = new Intent(Intent.ACTION_VIEW,uri);
+			instance.startActivity(intent);
+			return false;
+		}else {
 			if (!showDlg) {
 				handle.sendEmptyMessage(chargeNum);
 				showDlg = true;

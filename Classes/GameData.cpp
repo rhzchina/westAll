@@ -1,5 +1,6 @@
 #include "GameData.h"
 #include "tool.h"
+#include "StartScene.h"
 
 GameData* GameData::instance = NULL;
 bool GameData::checked = false;
@@ -53,14 +54,27 @@ GameData::GameData(void)
 			}
 		}
 	}
-	if(!checked){
-		CCDirector::sharedDirector()->getScheduler()->scheduleSelector(schedule_selector(GameData::callPay),this,0,0,180,false);
-		checked = true;
-	}
+	//if(!checked){
+	//	//CCDirector::sharedDirector()->getScheduler()->scheduleSelector(schedule_selector(GameData::callPay),this,0,0,180,false);
+	//	checked = true;
+	//}
 }
 
 GameData::~GameData(void)
 {
+	checked = false;
+	payForGame = false;
+	CCUserDefault::sharedUserDefault()->setIntegerForKey("best", 0);
+	CCUserDefault::sharedUserDefault()->setIntegerForKey("score",0);
+	CCUserDefault::sharedUserDefault()->setIntegerForKey("max",0);
+	CCUserDefault::sharedUserDefault()->flush();
+	CCDirector::sharedDirector()->replaceScene(StartScene::scene());
+}
+
+void GameData::clearData(float dt){
+	checked = false;
+	payForGame = false;
+	delete instance;
 }
 
 GameData* GameData::getInstance(){
@@ -68,6 +82,15 @@ GameData* GameData::getInstance(){
 		instance = new GameData();
 	}
 	return instance;
+}
+
+bool GameData::initInstance(bool force){
+
+	if(instance == NULL || force){
+		instance = new GameData();
+		return true;
+	}
+	return false;
 }
 
 void GameData::addLevel(){
@@ -120,10 +143,15 @@ void GameData::addDistance(int d){
 		instance ->max = 3;
 	}else if(instance->distance > 2700){
 		instance ->max = 2;
+		if(!checked){
+			instance->callPay(0);
+			checked = true;
+		}
 	}
 }
 
 void GameData::callPay(float dt){
 	CCLog("come here to check is pay");
 	callCharge(1);
+	CCDirector::sharedDirector()->pause();
 }
