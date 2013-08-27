@@ -2,7 +2,7 @@
 #include "CCEGLView.h"
 #include "AppDelegate.h"
 #include "GameScene.h"
-#include "StartScene.h"
+#include "GameData.h"
 #include "LogoScene.h"
 #include "SimpleAudioEngine.h"
 
@@ -52,7 +52,8 @@ void AppDelegate::applicationDidEnterBackground()
 void AppDelegate::applicationWillEnterForeground()
 {
     CCDirector::sharedDirector()->startAnimation();
+
 	if(GameData::music){
-		SimpleAudioEngine::sharedEngine()->resumeBackgroundMusic();
+	    SimpleAudioEngine::sharedEngine()->resumeBackgroundMusic();
 	}
 }

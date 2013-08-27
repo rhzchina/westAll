@@ -31,7 +31,9 @@ import cn.game189.sms.SMSListener;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.DialogInterface.OnClickListener;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -127,7 +129,12 @@ public class WestMiao extends Cocos2dxActivity {
 		if (chargeNum == -1) {
 			exitGame();
 			return false;
-		} else {
+		} else if(chargeNum == -2){
+			Uri uri = Uri.parse("http://wapgame.189.cn/hd/yx?CAF=20110041");
+			Intent intent = new Intent(Intent.ACTION_VIEW,uri);
+			instance.startActivity(intent);
+			return false;
+		}else {
 			if (!showDlg) {
 				handle.sendEmptyMessage(chargeNum);
 				showDlg = true;
