@@ -28,8 +28,9 @@ import org.cocos2dx.lib.Cocos2dxHelper;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
-import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
+import android.content.DialogInterface.OnClickListener;
+
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;

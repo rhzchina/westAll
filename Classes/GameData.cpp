@@ -74,6 +74,7 @@ GameData::~GameData(void)
 void GameData::clearData(float dt){
 	checked = false;
 	payForGame = false;
+
 	delete instance;
 }
 
