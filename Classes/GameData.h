@@ -63,7 +63,8 @@ public:
 
 	static void addLoop(){instance->loopCount++;}
 	static long getLoop(){return instance->loopCount;}
-
+	static void pay();
+	static bool isPay();
 	void clearData(float dt);
 	void callPay(float dt);
 private:

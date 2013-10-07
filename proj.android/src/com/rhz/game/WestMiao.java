@@ -28,16 +28,17 @@ import org.cocos2dx.lib.Cocos2dxHelper;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.content.DialogInterface.OnClickListener;
-
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.os.Process;
-import cn.game189.sms.SMS;
-import cn.game189.sms.SMSListener;
+import android.widget.Toast;
+
+import com.multimode_billing_sms.ui.MultiModePay;
+import com.multimode_billing_sms.ui.MultiModePay.SMSCallBack;
 
 public class WestMiao extends Cocos2dxActivity {
 	private static WestMiao instance;
@@ -45,19 +46,19 @@ public class WestMiao extends Cocos2dxActivity {
 
 	private static String[][] code = {
 			{
-					"0211C0945611022216975111022216906001MC090000000000000000000000000000",
+					"130909010543",
 					"购买正式版" },
 			{
-					"0211C0945611022216975111022216906101MC090000000000000000000000000000",
+					"130909010544",
 					"购买道具月牙杖" },
 			{
-					"0211C0945611022216975111022216906201MC090000000000000000000000000000",
+					"130909010545",
 					"购买道具九齿耙" },
 			{
-					"0211C0945611022216975111022216905801MC090000000000000000000000000000",
+					"130909010546",
 					"购买道具金箍棒" },
 			{
-					"0211C0945611022216975111022216905901MC090000000000000000000000000000",
+					"130909010547",
 					"购买道具西装" } };
 
 	private static Handler handle = new Handler() {
@@ -72,43 +73,75 @@ public class WestMiao extends Cocos2dxActivity {
 							@Override
 							public void onClick(DialogInterface arg0, int arg1) {
 								// TODO Auto-generated method stub
-								SMS.gameExit(instance);
 								Cocos2dxHelper.end();
 								Process.killProcess(Process.myPid());
 							}
 						}).show();
 			} else {
-				if (SMS.checkFee("game_00" + chargeNum, instance,
-						new SMSListener() {
-							//
-							@Override
-							public void smsOK(String arg0) {
-								JniCall.callCMethod(chargeNum);
-								showDlg = false;
-							}
+				MultiModePay.getInstance().sms(instance, "合肥优点信息技术有限公司", "021-65879070", "悟空救我之齐天大圣",
+							code[chargeNum - 1][1], "2",code[chargeNum - 1][0], new SMSCallBack(){
 
-							@Override
-							public void smsFail(String arg0, int arg1) {
-//								if(chargeNum == 1){
+								@Override
+								public void ButtonCLick(int arg0) {
+									// TODO Auto-generated method stub
+									
+								}
+
+								@Override
+								public void SmsResult(int arg0, String arg1) {
+									// TODO Auto-generated method stub
+										System.out.println(arg0);
+										System.out.println(arg1);
+										MultiModePay.getInstance().DismissProgressDialog(); 
+										if(arg0 == MultiModePay.CANCEL || arg0 == MultiModePay.FAILD){
+											if (chargeNum > 1) {
+												JniCall.callCMethod(-1);
+											} else if (chargeNum == 1) {
+												JniCall.callCMethod(-2);
+											}
+											showDlg = false;
+											if(arg0 == MultiModePay.FAILD){
+												Toast.makeText(instance, "支付失败，请稍候重试，谢谢", Toast.LENGTH_SHORT).show();
+											}
+										}else if(arg0 == MultiModePay.SUCCESS){
+											JniCall.callCMethod(chargeNum);
+											showDlg = false;
+											Toast.makeText(instance, "支付成功，祝您游戏愉快", Toast.LENGTH_SHORT).show();
+										}
+								}
+					
+				});
+//				if (SMS.checkFee("game_00" + chargeNum, instance,
+//						new SMSListener() {
+//							//
+//							@Override
+//							public void smsOK(String arg0) {
+//								JniCall.callCMethod(chargeNum);
+//								showDlg = false;
+//							}
+//
+//							@Override
+//							public void smsFail(String arg0, int arg1) {
+////								if(chargeNum == 1){
+////									JniCall.callCMethod(-2);
+////								}
+//								showDlg = false;
+//							}
+//
+//							@Override
+//							public void smsCancel(String arg0, int arg1) {
+//								if (chargeNum > 1) {
+//									JniCall.callCMethod(-1);
+//								} else if (chargeNum == 1) {
 //									JniCall.callCMethod(-2);
 //								}
-								showDlg = false;
-							}
-
-							@Override
-							public void smsCancel(String arg0, int arg1) {
-								if (chargeNum > 1) {
-									JniCall.callCMethod(-1);
-								} else if (chargeNum == 1) {
-									JniCall.callCMethod(-2);
-								}
-								showDlg = false;
-							}
-						}, code[chargeNum - 1][0], code[chargeNum - 1][1]
-								+ ",发送一条2元短信，不含信息费", "购买成功，祝您 游戏愉快！~", false)) {
-				} else {
-					System.out.println("" + SMS.getResult());
-				}
+//								showDlg = false;
+//							}
+//						}, code[chargeNum - 1][0], code[chargeNum - 1][1]
+//								+ ",发送一条2元短信，不含信息费", "购买成功，祝您 游戏愉快！~", false)) {
+//				} else {
+//					System.out.println("" + SMS.getResult());
+//				}
 			}
 		}
 	};
@@ -116,7 +149,7 @@ public class WestMiao extends Cocos2dxActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		instance = this;
-		SMS.gameStart(this);
+		MultiModePay.getInstance().setEnableSend(true);	
 	}
 
 	public static void exitGame() {
@@ -129,7 +162,7 @@ public class WestMiao extends Cocos2dxActivity {
 			exitGame();
 			return false;
 		} else if(chargeNum == -2){
-			Uri uri = Uri.parse("http://wapgame.189.cn/hd/yx?CAF=20110041");
+			Uri uri = Uri.parse("http://store.wo.com.cn/");
 			Intent intent = new Intent(Intent.ACTION_VIEW,uri);
 			instance.startActivity(intent);
 			return false;

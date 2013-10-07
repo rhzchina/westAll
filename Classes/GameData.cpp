@@ -47,17 +47,17 @@ GameData::GameData(void)
 			}else if (j == 1){
 				data[i].push_back(0);
 			}else{
-				sprintf(key, "type%d%jbuy",i, j - 1);
+				sprintf(key, "type%d%dbuy",i, j - 1);
 				if(CCUserDefault::sharedUserDefault()->getBoolForKey(key)){
 					data[i].push_back(j - 1);
 				}
 			}
 		}
 	}
-	//if(!checked){
-	//	//CCDirector::sharedDirector()->getScheduler()->scheduleSelector(schedule_selector(GameData::callPay),this,0,0,180,false);
-	//	checked = true;
-	//}
+	if(!checked && !GameData::isPay()){
+		CCDirector::sharedDirector()->getScheduler()->scheduleSelector(schedule_selector(GameData::callPay),this,0,0,180,false);
+		checked = true;
+	}
 }
 
 GameData::~GameData(void)
@@ -119,11 +119,19 @@ void GameData::reset(bool all){
 		CCUserDefault::sharedUserDefault()->setIntegerForKey("score", instance->score);
 		CCUserDefault::sharedUserDefault()->setIntegerForKey("max", instance->max);
 		CCUserDefault::sharedUserDefault()->flush();
-
 	}
 	instance->loopCount = 0;
 	instance->distance = 0;
 	
+}
+
+void GameData::pay(){
+	CCUserDefault::sharedUserDefault()->setBoolForKey("pay", true);
+	CCUserDefault::sharedUserDefault()->flush();
+}
+
+bool GameData::isPay(){
+	return CCUserDefault::sharedUserDefault()->getBoolForKey("pay");
 }
                                                                                                                                                                                                                                                                                                                                                                                                               
 bool GameData::bought(int type,int id){
@@ -144,10 +152,10 @@ void GameData::addDistance(int d){
 		instance ->max = 3;
 	}else if(instance->distance > 2700){
 		instance ->max = 2;
-		if(!checked){
+		/*if(!checked){
 			instance->callPay(0);
 			checked = true;
-		}
+		}*/
 	}
 }
 
