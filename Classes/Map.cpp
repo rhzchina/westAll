@@ -21,7 +21,7 @@ Map::~Map(void)
 {
 }
 
-void Map::resetMap(int level,GameScene* parent){
+void Map::resetMap(int level,GameScene* parent, bool end){
 	curLevel = level;
 	distance = 0;
 	countDistance = false;
@@ -34,7 +34,7 @@ void Map::resetMap(int level,GameScene* parent){
 		mapData.clear();
 	}
 	createData(level);
-	initMap(GameData::getLevel());
+	initMap(GameData::getLevel(), end);
 	addMap(parent);
 }
 
@@ -110,7 +110,7 @@ void Map::createData(int l){
 	}
 }
 
-void Map::initMap(int level){
+void Map::initMap(int level, bool end){
 	float x = 0;
 	float y = 0;
 
@@ -279,7 +279,15 @@ void Map::mapMove(GameScene* parent,Role* role){
 			parent->removeChild((CCSprite*)map->objectAtIndex(i),true);
 		}
 		map->removeAllObjects();
-		resetMap(curLevel + 1,parent);
+		
+		if(GameData::getLevel() == 1 && curLevel >= 1){
+			CCLog("到达这里可以结束一关");
+			GameData::getInstance()->callPay(0);
+		}else{
+			CCLog("现在的地图等级是%d， 关卡等级是%d", GameData::getLevel(), curLevel);
+			resetMap(curLevel + 1,parent);
+		}
+
 	}
 
 	if(startCur){
