@@ -12,7 +12,7 @@ class Map
 public:
 	Map(int,GameScene*);
 	~Map(void);
-	void initMap(int);
+	void initMap(int, bool = false);
 	void addMap(GameScene*);
 	void mapMove(GameScene*,Role* );
 	bool onLand(CCSprite*);
@@ -21,7 +21,7 @@ public:
 	void tempChange(float change){speedChange = change;}
 	void clearChange(){speedChange = 0;}
 	void createData(int);
-	void resetMap(int,GameScene*);
+	void resetMap(int,GameScene*, bool = false);
 	int getLevel(){return curLevel;}
 	float getPercent(){return curDis / distance > 0.95 ? 0.95 : curDis / distance;}
 private:
