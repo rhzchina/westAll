@@ -145,7 +145,6 @@ void Map::initMap(int level, bool end){
 						land->setTag(9);
 
 						if(end){
-							CCLog("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
 							CCSprite* end = CCSprite::createWithSpriteFrameName("end.png");
 							end->setTag(10);
 							end->setPosition(ccp(x + end->getContentSize().width + 60, y + 140));
@@ -301,7 +300,7 @@ void Map::mapMove(GameScene* parent,Role* role){
 		}
 		map->removeAllObjects();
 		
-		if(GameData::getLevel() == 1 && curLevel >= 2){
+		if(GameData::getLevel() == 1 && curLevel >= 3){
 			CCLog("到达这里可以结束一关");
 			if(GameData::isPay()){
 				GameData::setMax(2);
@@ -313,7 +312,7 @@ void Map::mapMove(GameScene* parent,Role* role){
 		}else{
 			CCLog("现在的地图等级是%d， 关卡等级是%d", GameData::getLevel(), curLevel);
 			bool end = false;
-			if(GameData::getLevel() == 1 && curLevel >= 1){
+			if(GameData::getLevel() == 1 && curLevel >= 2){
 				end = true;
 			}
 			resetMap(curLevel + 1,parent, end);

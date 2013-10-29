@@ -140,7 +140,6 @@ bool StartScene::init(){
 
 CCScene* StartScene::scene(){
 	CCScene* scene = NULL;
-
 	do{
 		scene = CCScene::create();
 		CC_BREAK_IF(!scene);
@@ -170,8 +169,8 @@ void StartScene::btnCallback(CCObject* sender){
 		break;
 		//shopBtn
 	case 2:
-		CCDirector::sharedDirector()->replaceScene(WelcomeScene::scene());
 		CCSpriteFrameCache::sharedSpriteFrameCache()->removeSpriteFrames();
+		CCDirector::sharedDirector()->replaceScene(WelcomeScene::scene());
 		break;
 	case 3:
 		callCharge(-2);

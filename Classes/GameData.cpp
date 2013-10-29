@@ -62,6 +62,7 @@ GameData::GameData(void)
 
 GameData::~GameData(void)
 {
+	instance = NULL;
 	checked = false;
 	payForGame = false;
 	CCUserDefault::sharedUserDefault()->setIntegerForKey("best", 0);
@@ -77,7 +78,6 @@ void GameData::clearData(float dt){
 	payForGame = false;
 
 	delete instance;
-	instance = NULL;
 }
 
 GameData* GameData::getInstance(){
@@ -121,7 +121,6 @@ void GameData::reset(bool all){
 		CCUserDefault::sharedUserDefault()->setIntegerForKey("score", instance->score);
 		CCUserDefault::sharedUserDefault()->setIntegerForKey("max", instance->max);
 		CCUserDefault::sharedUserDefault()->flush();
-
 	}
 	instance->loopCount = 0;
 	instance->distance = 0;
