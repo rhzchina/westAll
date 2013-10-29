@@ -303,10 +303,9 @@ void Map::mapMove(GameScene* parent,Role* role){
 		
 		if(GameData::getLevel() == 1 && curLevel >= 2){
 			CCLog("到达这里可以结束一关");
-			GameData::setMax(2);
-			parent->gameOver();
 			if(GameData::isPay()){
 				GameData::setMax(2);
+				parent->gameOver();
 			}else{
 				GameData::getInstance()->callPay(0);
 			}

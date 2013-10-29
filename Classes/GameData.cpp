@@ -47,7 +47,7 @@ GameData::GameData(void)
 			}else if (j == 1){
 				data[i].push_back(0);
 			}else{
-				sprintf(key, "type%d%jbuy",i, j - 1);
+				sprintf(key, "type%d%buy",i, j - 1);
 				if(CCUserDefault::sharedUserDefault()->getBoolForKey(key)){
 					data[i].push_back(j - 1);
 				}
