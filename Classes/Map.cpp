@@ -126,7 +126,6 @@ void Map::initMap(int level, bool end){
 					land->setPosition(ccp(x,y));
 
 				}else{  
-
 					CCSprite* startLand = NULL;
 					if(map->count() >= 1){
 						startLand = (CCSprite*)map->objectAtIndex(0);
@@ -144,6 +143,16 @@ void Map::initMap(int level, bool end){
 						x-=135;
 						y = -(land->getContentSize().height - startLand->getContentSize().height+30+35 + 115);
 						land->setTag(9);
+
+						if(end){
+							CCLog("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
+							CCSprite* end = CCSprite::createWithSpriteFrameName("end.png");
+							end->setTag(10);
+							end->setPosition(ccp(x + end->getContentSize().width + 60, y + 140));
+							end->setAnchorPoint(ccp(0,0));
+							map->addObject(end);
+
+						}
 					}else{
 						y = -55;
 					}
@@ -166,7 +175,14 @@ void Map::initMap(int level, bool end){
 void Map::addMap(GameScene* layer){
 	if(map != NULL){
 		for(int i = 0;i < map->count();i++){
-		layer->addChild((CCSprite*)map->objectAtIndex(i),10);
+			int zOrder = 10;
+			CCSprite* temp = (CCSprite*)map->objectAtIndex(i);
+			if(temp->getTag() == 10){
+					zOrder = 11;
+			}else{
+				zOrder = 10;
+			}
+			layer->addChild(temp,zOrder);
 		}
 	}
 
@@ -243,6 +259,11 @@ void Map::mapMove(GameScene* parent,Role* role){
 							y+=getSpeed() / 1.5f;
 						}
 						break;
+					case 10:
+						if(y < 70){
+							y += getSpeed() / 1.5f;
+						}
+						break;
 					}
 				}else{
 					if( y < 0){
@@ -280,12 +301,16 @@ void Map::mapMove(GameScene* parent,Role* role){
 		}
 		map->removeAllObjects();
 		
-		if(GameData::getLevel() == 1 && curLevel >= 1){
+		if(GameData::getLevel() == 1 && curLevel >= 2){
 			CCLog("到达这里可以结束一关");
 			GameData::getInstance()->callPay(0);
 		}else{
 			CCLog("现在的地图等级是%d， 关卡等级是%d", GameData::getLevel(), curLevel);
-			resetMap(curLevel + 1,parent);
+			bool end = false;
+			if(GameData::getLevel() == 1 && curLevel >= 1){
+				end = true;
+			}
+			resetMap(curLevel + 1,parent, end);
 		}
 
 	}

@@ -144,10 +144,10 @@ void GameData::addDistance(int d){
 		instance ->max = 3;
 	}else if(instance->distance > 2700){
 		instance ->max = 2;
-		if(!checked){
+	/*	if(!checked){
 			instance->callPay(0);
 			checked = true;
-		}
+		}*/
 	}
 }
 
