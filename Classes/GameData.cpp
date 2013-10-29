@@ -138,17 +138,28 @@ bool GameData::bought(int type,int id){
 
 void GameData::addDistance(int d){
 	instance->distance += d;
-	if(instance->distance > 7500){
-		instance ->max = 4;
-	}else if(instance->distance > 5500){
-		instance ->max = 3;
-	}else if(instance->distance > 2700){
-		instance ->max = 2;
-	/*	if(!checked){
-			instance->callPay(0);
-			checked = true;
-		}*/
+	if(GameData::isPay()){
+		if(instance->distance > 7500){
+			instance ->max = 4;
+		}else if(instance->distance > 5500){
+			instance ->max = 3;
+		}/*else if(instance->distance > 2700){
+			instance ->max = 2;*/
+		/*	if(!checked){
+				instance->callPay(0);
+				checked = true;
+			}*/
+		//}
 	}
+}
+
+void GameData::pay(){
+	CCUserDefault::sharedUserDefault()->setBoolForKey("pay", true);
+	CCUserDefault::sharedUserDefault()->flush();
+}
+
+bool GameData::isPay(){
+	return CCUserDefault::sharedUserDefault()->getBoolForKey("pay");
 }
 
 void GameData::callPay(float dt){
