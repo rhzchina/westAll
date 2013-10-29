@@ -47,7 +47,7 @@ GameData::GameData(void)
 			}else if (j == 1){
 				data[i].push_back(0);
 			}else{
-				sprintf(key, "type%d%buy",i, j - 1);
+				sprintf(key, "type%d%dbuy",i, j - 1);
 				if(CCUserDefault::sharedUserDefault()->getBoolForKey(key)){
 					data[i].push_back(j - 1);
 				}
@@ -68,6 +68,7 @@ GameData::~GameData(void)
 	CCUserDefault::sharedUserDefault()->setIntegerForKey("score",0);
 	CCUserDefault::sharedUserDefault()->setIntegerForKey("max",0);
 	CCUserDefault::sharedUserDefault()->flush();
+	CCSpriteFrameCache::sharedSpriteFrameCache()->removeSpriteFrames();
 	CCDirector::sharedDirector()->replaceScene(StartScene::scene());
 }
 
@@ -76,6 +77,7 @@ void GameData::clearData(float dt){
 	payForGame = false;
 
 	delete instance;
+	instance = NULL;
 }
 
 GameData* GameData::getInstance(){

@@ -498,6 +498,7 @@ void GameScene::btnCallback(CCObject* sender){
 		showPauseLayer(true);
 		break;
 	case 2:
+		callCharge(1);
 		showPauseLayer(false);
 		CCDirector::sharedDirector()->resume();
 		break;

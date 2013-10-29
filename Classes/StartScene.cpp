@@ -133,7 +133,6 @@ bool StartScene::init(){
 				toggle->setSelectedIndex(1);
 			}
 		}
-
 		success = true;
 	}while(false);
 	return success; 

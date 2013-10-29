@@ -307,6 +307,7 @@ void Map::mapMove(GameScene* parent,Role* role){
 				GameData::setMax(2);
 				parent->gameOver();
 			}else{
+				parent->gameOver();
 				GameData::getInstance()->callPay(0);
 			}
 		}else{

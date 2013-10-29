@@ -18,8 +18,8 @@ JNIEXPORT void JNICALL Java_com_rhz_game_JniCall_callCMethod
 	}else if (type == -2){
 		//CCDirector::sharedDirector()->end();
 		//GameData::clearData();
-		//CCDirector::sharedDirector()->replaceScene(StartScene::scene());
 		CCDirector::sharedDirector()->resume();
+		//CCDirector::sharedDirector()->getScheduler()->scheduleSelector(schedule_selector(GameData::clearData),GameData::getInstance(),0,false,0,0);
 		CCDirector::sharedDirector()->getScheduler()->scheduleSelector(schedule_selector(GameData::clearData),GameData::getInstance(),0,false,0,0);
 
 	}
