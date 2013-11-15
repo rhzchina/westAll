@@ -156,6 +156,8 @@ void GameData::addDistance(int d){
 
 void GameData::pay(){
 	CCUserDefault::sharedUserDefault()->setBoolForKey("pay", true);
+	instance->max = 2;
+	CCUserDefault::sharedUserDefault()->setIntegerForKey("max", instance->max);
 	CCUserDefault::sharedUserDefault()->flush();
 }
 
