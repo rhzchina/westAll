@@ -121,16 +121,6 @@ public class Cocos2dxGLSurfaceView extends GLSurfaceView {
 	// Getter & Setter
 	// ===========================================================
 
-
-       public static void queueAccelerometer(final float x, final float y, final float z, final long timestamp) {	
-	   mCocos2dxGLSurfaceView.queueEvent(new Runnable() {
-		@Override
-		    public void run() {
-			    Cocos2dxAccelerometer.onSensorChanged(x, y, z, timestamp);
-		}
-	    });
-	}
-
 	public void setCocos2dxRenderer(final Cocos2dxRenderer renderer) {
 		this.mCocos2dxRenderer = renderer;
 		this.setRenderer(this.mCocos2dxRenderer);
@@ -294,14 +284,14 @@ public class Cocos2dxGLSurfaceView extends GLSurfaceView {
 	public boolean onKeyDown(final int pKeyCode, final KeyEvent pKeyEvent) {
 		switch (pKeyCode) {
 			case KeyEvent.KEYCODE_BACK:
-//				new AlertDialog.Builder(getContext()).setMessage("确定要退出游戏吗？").setPositiveButton("确定", new android.content.DialogInterface.OnClickListener(){
+//				new AlertDialog.Builder(getContext()).setMessage("是否退出游戏？").setPositiveButton("确定",new DialogInterface.OnClickListener() {
+//					
 //					@Override
-//					public void onClick(DialogInterface arg0, int arg1) {
-//						android.os.Process.killProcess(android.os.Process.myPid());
+//					public void onClick(DialogInterface dialog, int which) {
+//						Cocos2dxHelper.terminateProcess();
 //					}
 //				}).setNegativeButton("取消", null).show();
 				WestMiao.exitGame();
-				return true;
 			case KeyEvent.KEYCODE_MENU:
 				this.queueEvent(new Runnable() {
 					@Override

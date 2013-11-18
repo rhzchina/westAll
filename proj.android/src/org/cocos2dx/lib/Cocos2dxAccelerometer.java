@@ -33,7 +33,6 @@ import android.util.Log;
 import android.view.Display;
 import android.view.Surface;
 import android.view.WindowManager;
-import android.os.Build.*;
 
 public class Cocos2dxAccelerometer implements SensorEventListener {
 	// ===========================================================
@@ -73,16 +72,6 @@ public class Cocos2dxAccelerometer implements SensorEventListener {
 		this.mSensorManager.registerListener(this, this.mAccelerometer, SensorManager.SENSOR_DELAY_GAME);
 	}
 
-        public void setInterval(float interval) {
-	        // Honeycomb version is 11
-	        if(android.os.Build.VERSION.SDK_INT < 11) {
-		    this.mSensorManager.registerListener(this, this.mAccelerometer, SensorManager.SENSOR_DELAY_GAME);
-		} else {
-		    //convert seconds to microseconds
-		    this.mSensorManager.registerListener(this, this.mAccelerometer, (int)(interval*100000));
-		}
-	}
-      
 	public void disable() {
 		this.mSensorManager.unregisterListener(this);
 	}
@@ -116,10 +105,9 @@ public class Cocos2dxAccelerometer implements SensorEventListener {
 			final float tmp = x;
 			x = y;
 			y = -tmp;
-		}		
-		
-		Cocos2dxGLSurfaceView.queueAccelerometer(x,y,z,pSensorEvent.timestamp);
-		
+		}
+
+		Cocos2dxAccelerometer.onSensorChanged(x, y, z, pSensorEvent.timestamp);
 		/*
 		if(BuildConfig.DEBUG) {
 			Log.d(TAG, "x = " + pSensorEvent.values[0] + " y = " + pSensorEvent.values[1] + " z = " + pSensorEvent.values[2]);
@@ -133,10 +121,9 @@ public class Cocos2dxAccelerometer implements SensorEventListener {
 
 	// ===========================================================
 	// Methods
-        // Native method called from Cocos2dxGLSurfaceView (To be in the same thread)
 	// ===========================================================
-    
-	public static native void onSensorChanged(final float pX, final float pY, final float pZ, final long pTimestamp);
+
+	private static native void onSensorChanged(final float pX, final float pY, final float pZ, final long pTimestamp);
 
 	// ===========================================================
 	// Inner and Anonymous Classes

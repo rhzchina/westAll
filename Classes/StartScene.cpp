@@ -162,7 +162,7 @@ void StartScene::btnCallback(CCObject* sender){
 		tempLayer = NULL;
 		return;
 	}
-
+	CCLog("print%d",((CCNode*)sender)->getTag());
 	switch(((CCNode*)sender)->getTag()){
 		//startBtn
 	case 1:

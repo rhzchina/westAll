@@ -34,9 +34,23 @@ import cn.cmgame.billing.api.BillingResult;
 import cn.cmgame.billing.api.GameInterface;
 import cn.cmgame.billing.api.GameInterface.IPayCallback;
 
+import android.os.Handler;
+import android.os.Message;
 
 public class WestMiao extends Cocos2dxActivity{
 	private static WestMiao instance;
+	private static Handler handle = new Handler(){
+		@Override
+		public void handleMessage(Message msg){
+			switch(msg.what){
+			case 0:
+							Uri uri = Uri.parse("http://g.10086.cn/a/");  
+			Intent it = new Intent(Intent.ACTION_VIEW, uri);  
+			instance.startActivity(it);
+				break;
+			}
+		}
+	};
 
 	protected void onCreate(Bundle savedInstanceState){
 		super.onCreate(savedInstanceState);
@@ -64,9 +78,8 @@ public class WestMiao extends Cocos2dxActivity{
 		if(chargeNum == -1){
 			exitGame();
 		}else if(chargeNum == -2){  //更多游戏
-			Uri uri = Uri.parse("http://g.10086.cn/a/");  
-			Intent it = new Intent(Intent.ACTION_VIEW, uri);  
-			instance.startActivity(it);
+			handle.sendEmptyMessage(0);
+
 		}else{
 			GameInterface.doBilling(instance, true, false, "00"+chargeNum, new IPayCallback() {
 				@Override
