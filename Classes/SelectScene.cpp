@@ -159,7 +159,7 @@ void SelectScene::ccTouchesEnded(CCSet* touches,CCEvent* event){
 	CCPoint location = CCDirector::sharedDirector()->convertToGL(touch->getLocationInView());
 	int num = touchedLevel(location);
 	if (num != -1 && num == touched){
-		if(num == 1 || checkPay(1)){
+		if(num == 1 || GameData::isPay()){
 			GameData::setLevel(num);
 			CCSpriteFrameCache::sharedSpriteFrameCache()->removeSpriteFrames();
 			CCDirector::sharedDirector()->replaceScene(GameScene::scene());

@@ -3,12 +3,8 @@
       package="com.rhz.game"
       android:versionCode="1"
       android:versionName="1.0">
-    <application android:icon="@drawable/ic_launcher" android:label="@string/app_name">
-        <activity android:name=".WestMiao" android:label="@string/app_name" 
-			android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
-            android:screenOrientation="landscape">
-        </activity>
-        		<activity android:name="cn.cmgame.billing.ui.GameOpenActivity"
+    <application android:icon="@drawable/ic_launcher" android:label="@string/app_name" android:name=".GameApp">
+        <activity android:name="cn.cmgame.billing.ui.GameOpenActivity"
 			android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
 			android:screenOrientation="landscape">
 			<intent-filter>
@@ -20,6 +16,10 @@
 				<category android:name="android.intent.category.CHINAMOBILE_GAMES" />
 			</intent-filter>
 		</activity>
+                <activity android:name=".WestMiao"  android:screenOrientation="landscape"
+                  android:configChanges="orientation|keyboardHidden"
+                  android:theme="@android:style/Theme.NoTitleBar.Fullscreen">
+        </activity>
     </application>
     <uses-sdk android:minSdkVersion="7" />
     <supports-screens android:largeScreens="true"

@@ -61,8 +61,13 @@ public:
 	static int getBest(){return instance->best;}
 	static void reset(bool all);
 
+	static void pay();
+	static bool isPay();
+
 	static void addLoop(){instance->loopCount++;}
 	static long getLoop(){return instance->loopCount;}
+
+	static void setMax(int m){if(instance->max < m) instance->max = m;}
 
 	void clearData(float dt);
 	void callPay(float dt);

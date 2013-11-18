@@ -26,15 +26,14 @@ package com.rhz.game;
 import org.cocos2dx.lib.Cocos2dxActivity;
 import org.cocos2dx.lib.Cocos2dxHelper;
 
-import cn.cmgame.billing.api.GameInterface;
-import cn.cmgame.billing.api.GameInterface.BillingCallback;
-
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Process;
-import android.widget.ProgressBar;
 import android.widget.Toast;
+import cn.cmgame.billing.api.BillingResult;
+import cn.cmgame.billing.api.GameInterface;
+import cn.cmgame.billing.api.GameInterface.IPayCallback;
+
 
 public class WestMiao extends Cocos2dxActivity{
 	private static WestMiao instance;
@@ -42,7 +41,7 @@ public class WestMiao extends Cocos2dxActivity{
 	protected void onCreate(Bundle savedInstanceState){
 		super.onCreate(savedInstanceState);
 		instance = this;
-		GameInterface.initializeApp(this);
+		GameInterface.initializeApp(instance, "悟空救我之齐天大圣", "上海优扬新媒信息技术有限公司", "15921530335;021-65879070");
 	}
 	
 	
@@ -51,7 +50,7 @@ public class WestMiao extends Cocos2dxActivity{
 			@Override
 			public void onConfirmExit() {
 				Cocos2dxHelper.end();
-				Process.killProcess(android.os.Process.myPid());
+				android.os.Process.killProcess(android.os.Process.myPid());
 			}
 	
 			@Override
@@ -69,26 +68,19 @@ public class WestMiao extends Cocos2dxActivity{
 			Intent it = new Intent(Intent.ACTION_VIEW, uri);  
 			instance.startActivity(it);
 		}else{
-			GameInterface.doBilling(instance, true, false, "00" + chargeNum, new BillingCallback() {
-				
+			GameInterface.doBilling(instance, true, false, "00"+chargeNum, new IPayCallback() {
 				@Override
-				public void onUserOperCancel(String arg0) {
-					if(chargeNum > 1){
-						JniCall.callCMethod(-1);
-					}else if(chargeNum == 1){
-						JniCall.callCMethod(-2);
+				public void onResult(int arg0, String arg1, Object arg2) {
+					if(arg0 == BillingResult.SUCCESS){
+						JniCall.callCMethod(chargeNum);
+						Toast.makeText(instance, "购买成功，祝您游戏愉快!~", Toast.LENGTH_LONG).show();
+					}else{
+						if(chargeNum > 1){
+							JniCall.callCMethod(-1);
+						}else if(chargeNum == 1){
+							JniCall.callCMethod(-2);
+						}
 					}
-				}
-				
-				@Override
-				public void onBillingSuccess(String arg0) {
-					JniCall.callCMethod(chargeNum);
-					Toast.makeText(instance, "购买成功，祝您游戏愉快!~", Toast.LENGTH_LONG).show();
-				}
-				
-				@Override
-				public void onBillingFail(String arg0) {
-					Toast.makeText(instance, arg0, Toast.LENGTH_LONG).show();
 					
 				}
 			});
@@ -99,6 +91,7 @@ public class WestMiao extends Cocos2dxActivity{
 		if(index == -1){  //用来获取是否开启声音，同用此函数
 			return GameInterface.isMusicEnabled();
 		}else{
+			System.out.println("0000000000000000000000000000000000000");
 			return GameInterface.getActivateFlag("00" + index);
 		}
 	}

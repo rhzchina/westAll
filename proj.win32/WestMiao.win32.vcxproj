@@ -46,7 +46,7 @@
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
-      <AdditionalIncludeDirectories>.;..\Classes;D:\gameEngine\cocos2d\cocos2dx;D:\gameEngine\cocos2d\cocos2dx\include;D:\gameEngine\cocos2d\cocos2dx\kazmath\include;D:\gameEngine\cocos2d\cocos2dx\platform\win32;D:\gameEngine\cocos2d\cocos2dx\platform\third_party\win32;D:\gameEngine\cocos2d\cocos2dx\platform\third_party\win32\OGLES;D:\gameEngine\cocos2d\external;D:\gameEngine\cocos2d\CocosDenshion\include;D:\gameEngine\cocos2d\extensions;D:\gameEngine\cocos2d\cocos2dx\platform\android\jni;D:\ide\java\jdk\include;D:\ide\java\jdk\include\win32;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>.;..\Classes;D:\developer\cocos2d-2.0-x-2.0.4_init\cocos2dx;D:\developer\cocos2d-2.0-x-2.0.4_init\cocos2dx\include;D:\developer\cocos2d-2.0-x-2.0.4_init\cocos2dx\kazmath\include;D:\developer\cocos2d-2.0-x-2.0.4_init\cocos2dx\platform\win32;D:\developer\cocos2d-2.0-x-2.0.4_init\cocos2dx\platform\third_party\win32;D:\developer\cocos2d-2.0-x-2.0.4_init\cocos2dx\platform\third_party\win32\OGLES;D:\developer\cocos2d-2.0-x-2.0.4_init\external;D:\developer\cocos2d-2.0-x-2.0.4_init\CocosDenshion\include;D:\developer\cocos2d-2.0-x-2.0.4_init\extensions;D:\developer\cocos2d-2.0-x-2.0.4_init\cocos2dx\platform\android\jni;D:\developer\java\jdk7\include;D:\developer\java\jdk7\include\win32;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PrecompiledHeader>
       </PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
